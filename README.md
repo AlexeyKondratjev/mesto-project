@@ -21,4 +21,4 @@
 Для создания адаптивности используются медиазапросы.
 
 **Ссылка на проект**
-Проект доступен на GitHub Pages по [ссылке](https://alexeykondratjev.github.io/).
+Проект доступен на GitHub Pages по [ссылке](https://alexeykondratjev.github.io/mesto-project/).
