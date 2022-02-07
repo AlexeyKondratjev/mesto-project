@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesto</title>
+  <link rel="stylesheet" href="./index.css">
+</head>
+
+<body class="body">
+
+  <div class="page">
+
+    <section class="popup">
+      <div class="popup__container">
+        <div class="popup__toggle"></div>
+        <h2 class="popup__heading">Редактировать профиль</h2>
+        <form class="form">
+          <fieldset class="form__input-container">
+            <input type="text" placeholder="Имя" class="form__item">
+            <input type="text" placeholder="О себе" class="form__item">
+          </fieldset>
+          <fieldset class="form__handlers">
+            <input type="submit" value="Сохранить" class="form__button">
+          </fieldset>
+        </form>
+      </div>
+    </section>
+
+    <header class="header">
+      <div class="logo"></div>
+    </header>
+
+    <main class="content">
+
+      <section class="profile">
+        <div class="profile__avatar-and-info-group">
+          <img src="./images/Kusto.jpg" alt="Фото профиля." class="profile__avatar">
+          <div class="profile__info">
+            <div class="profile__title-with-button-group">
+              <p class="profile__title page__nowrap-title">Жак-Ив Кусто</p>
+              <input type="image" src="./images/edit-button_pic.svg" alt="Редактировать профиль." class="edit-button">
+            </div>
+            <p class="profile__subtitle page__nowrap-title">Исследователь океана</p>
+          </div>
+        </div>
+        <!-- <input type="button" value="" class="add-button"> -->
+        <button type="button" class="add-button"></button>
+      </section>
+
+      <section class="elements">
+        <article class="element">
+          <img src="./images/Ryazan.jpg" alt="Православный собор с колокольней на фоне рассветного неба."
+            class="element__image">
+          <div class="element__footer">
+            <p class="element__title page__nowrap-title">Рязань</p>
+            <button type="button" class="like-button like-button_active"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/Sankt-Petersburg.jpg" alt="Поднятый разводной мост на фоне закатного неба."
+            class="element__image">
+          <div class="element__footer">
+            <p class="element__title page__nowrap-title">Санкт-Петербург</p>
+            <button type="button" class="like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/Khabarovsk.jpg" alt="Православный собор, окруженный парком." class="element__image">
+          <div class="element__footer">
+            <p class="element__title page__nowrap-title">Хабаровск</p>
+            <button type="button" class="like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/Elbrus-Mountain.jpg" alt="Далекая гора на фоне закатного неба." class="element__image">
+          <div class="element__footer">
+            <p class="element__title page__nowrap-title">Гора Эльбрус</p>
+            <button type="button" class="like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/Dombay.jpg" alt="Острый горный пик с ледником." class="element__image">
+          <div class="element__footer">
+            <p class="element__title page__nowrap-title">Домбай</p>
+            <button type="button" class="like-button"></button>
+          </div>
+        </article>
+        <article class="element">
+          <img src="./images/Karachaevo-Cherkessia.jpg" alt="Старый замок, на фоне покрытых лесом гор."
+            class="element__image">
+          <div class="element__footer">
+            <p class="element__title page__nowrap-title">Карачаево-Черкессия</p>
+            <button type="button" class="like-button"></button>
+          </div>
+        </article>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <p class="footer__copyright">&COPY; 2020 Mesto Russia</p>
+    </footer>
+
+  </div>
+
+</body>
+
+</html>

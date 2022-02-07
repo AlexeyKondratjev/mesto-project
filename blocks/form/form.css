@@ -1,0 +1,9 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  font-family: 'Inter', 'Arial', sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  color: #000;
+  width: 83.25%;
+}

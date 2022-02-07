@@ -1,0 +1,15 @@
+.edit-button {
+  width: 24px;
+  height: 24px;
+}
+
+.edit-button:hover {
+  opacity: .6;
+}
+
+@media (max-width: 575px) {
+  .edit-button {
+    width: 18px;
+    height: 18px;
+  }
+}
