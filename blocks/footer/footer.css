@@ -5,10 +5,15 @@
   max-width: 880px;
 }
 
+@media (max-width: 900px) {
+  .footer {
+    padding-left: 19px;
+  }
+}
+
 @media (max-width: 645px) {
   .footer {
     padding-top: 44px;
     padding-bottom: 36px;
-    max-width: 282px;
   }
 }

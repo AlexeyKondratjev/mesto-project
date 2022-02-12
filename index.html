@@ -16,20 +16,18 @@
       <div class="popup__container">
         <div class="popup__toggle"></div>
         <h2 class="popup__heading">Редактировать профиль</h2>
-        <form class="form">
+        <form name="profileEditForm" class="popup__form form">
           <fieldset class="form__input-container">
-            <input type="text" placeholder="Имя" class="form__item">
-            <input type="text" placeholder="О себе" class="form__item">
+            <input type="text" name="userName" placeholder="Имя" class="form__item">
+            <input type="text" name="aboutYourself" placeholder="О себе" class="form__item">
           </fieldset>
-          <fieldset class="form__handlers">
-            <input type="submit" value="Сохранить" class="form__button">
-          </fieldset>
+          <button type="submit" class="form__button">Сохранить</button>
         </form>
       </div>
     </section>
 
     <header class="header">
-      <div class="logo"></div>
+      <div class="header__logo logo"></div>
     </header>
 
     <main class="content">
@@ -39,14 +37,13 @@
           <img src="./images/Kusto.jpg" alt="Фото профиля." class="profile__avatar">
           <div class="profile__info">
             <div class="profile__title-with-button-group">
-              <p class="profile__title page__nowrap-title">Жак-Ив Кусто</p>
-              <input type="image" src="./images/edit-button_pic.svg" alt="Редактировать профиль." class="edit-button">
+              <h1 class="profile__title page__nowrap-title">Жак-Ив Кусто</h1>
+              <button type="button" class="profile__edit-button edit-button"></button>
             </div>
             <p class="profile__subtitle page__nowrap-title">Исследователь океана</p>
           </div>
         </div>
-        <!-- <input type="button" value="" class="add-button"> -->
-        <button type="button" class="add-button"></button>
+        <button type="button" class="profile__add-button add-button"></button>
       </section>
 
       <section class="elements">
@@ -55,7 +52,7 @@
             class="element__image">
           <div class="element__footer">
             <p class="element__title page__nowrap-title">Рязань</p>
-            <button type="button" class="like-button like-button_active"></button>
+            <button type="button" class="element__like-button like-button like-button_active"></button>
           </div>
         </article>
         <article class="element">
@@ -63,28 +60,28 @@
             class="element__image">
           <div class="element__footer">
             <p class="element__title page__nowrap-title">Санкт-Петербург</p>
-            <button type="button" class="like-button"></button>
+            <button type="button" class="element__like-button like-button"></button>
           </div>
         </article>
         <article class="element">
           <img src="./images/Khabarovsk.jpg" alt="Православный собор, окруженный парком." class="element__image">
           <div class="element__footer">
             <p class="element__title page__nowrap-title">Хабаровск</p>
-            <button type="button" class="like-button"></button>
+            <button type="button" class="element__like-button like-button"></button>
           </div>
         </article>
         <article class="element">
           <img src="./images/Elbrus-Mountain.jpg" alt="Далекая гора на фоне закатного неба." class="element__image">
           <div class="element__footer">
             <p class="element__title page__nowrap-title">Гора Эльбрус</p>
-            <button type="button" class="like-button"></button>
+            <button type="button" class="element__like-button like-button"></button>
           </div>
         </article>
         <article class="element">
           <img src="./images/Dombay.jpg" alt="Острый горный пик с ледником." class="element__image">
           <div class="element__footer">
             <p class="element__title page__nowrap-title">Домбай</p>
-            <button type="button" class="like-button"></button>
+            <button type="button" class="element__like-button like-button"></button>
           </div>
         </article>
         <article class="element">
@@ -92,7 +89,7 @@
             class="element__image">
           <div class="element__footer">
             <p class="element__title page__nowrap-title">Карачаево-Черкессия</p>
-            <button type="button" class="like-button"></button>
+            <button type="button" class="element__like-button like-button"></button>
           </div>
         </article>
       </section>
