@@ -12,7 +12,7 @@
 
   <div class="page">
 
-    <section class="popup">
+    <section class="popup popup_type_profileEdit">
       <div class="popup__container">
         <div class="popup__toggle"></div>
         <h2 class="popup__heading">Редактировать профиль</h2>
@@ -23,6 +23,29 @@
           </fieldset>
           <button type="submit" class="form__button">Сохранить</button>
         </form>
+      </div>
+    </section>
+
+    <section class="popup popup_type_elementAdd">
+      <div class="popup__container">
+        <div class="popup__toggle"></div>
+        <h2 class="popup__heading">Новое место</h2>
+        <form name="elementAddForm" class="popup__form form">
+          <fieldset class="form__input-container">
+            <input type="text" name="elementName" placeholder="Название" class="form__item">
+            <input type="text" name="elementSrc" placeholder="Ссылка на картинку" class="form__item">
+          </fieldset>
+          <button type="submit" class="form__button">Создать</button>
+        </form>
+      </div>
+    </section>
+
+    <section class="popup popup_type_imagePreview">
+      <div class="popup__container popup__container_type_imagePreview">
+        <div class="popup__toggle"></div>
+        <img src="#" alt=""
+          class="popup__image">
+        <h2 class="popup__image-heading"></h2>
       </div>
     </section>
 
@@ -47,51 +70,7 @@
       </section>
 
       <section class="elements">
-        <article class="element">
-          <img src="./images/Ryazan.jpg" alt="Православный собор с колокольней на фоне рассветного неба."
-            class="element__image">
-          <div class="element__footer">
-            <p class="element__title page__nowrap-title">Рязань</p>
-            <button type="button" class="element__like-button like-button like-button_active"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img src="./images/Sankt-Petersburg.jpg" alt="Поднятый разводной мост на фоне закатного неба."
-            class="element__image">
-          <div class="element__footer">
-            <p class="element__title page__nowrap-title">Санкт-Петербург</p>
-            <button type="button" class="element__like-button like-button"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img src="./images/Khabarovsk.jpg" alt="Православный собор, окруженный парком." class="element__image">
-          <div class="element__footer">
-            <p class="element__title page__nowrap-title">Хабаровск</p>
-            <button type="button" class="element__like-button like-button"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img src="./images/Elbrus-Mountain.jpg" alt="Далекая гора на фоне закатного неба." class="element__image">
-          <div class="element__footer">
-            <p class="element__title page__nowrap-title">Гора Эльбрус</p>
-            <button type="button" class="element__like-button like-button"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img src="./images/Dombay.jpg" alt="Острый горный пик с ледником." class="element__image">
-          <div class="element__footer">
-            <p class="element__title page__nowrap-title">Домбай</p>
-            <button type="button" class="element__like-button like-button"></button>
-          </div>
-        </article>
-        <article class="element">
-          <img src="./images/Karachaevo-Cherkessia.jpg" alt="Старый замок, на фоне покрытых лесом гор."
-            class="element__image">
-          <div class="element__footer">
-            <p class="element__title page__nowrap-title">Карачаево-Черкессия</p>
-            <button type="button" class="element__like-button like-button"></button>
-          </div>
-        </article>
+
       </section>
 
     </main>
@@ -102,6 +81,18 @@
 
   </div>
 
+  <template id="element-template">
+    <article class="element">
+      <img src="" alt="" class="element__image">
+      <div class="element__footer">
+        <p class="element__title page__nowrap-title"></p>
+        <button type="button" class="element__like-button like-button"></button>
+        <button type="button" class="element__delete-button delete-button"></button>
+      </div>
+    </article>
+  </template>
+
+  <script src="./scripts/index.js"></script>
 </body>
 
 </html>
