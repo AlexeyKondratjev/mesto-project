@@ -1,0 +1,33 @@
+{
+  "name": "mesto_project",
+  "version": "1.0.0",
+  "description": "-------------------------------",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack serve"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AlexeyKondratjev/mesto-project.git"
+  },
+  "author": "Alexey Kondratjev",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AlexeyKondratjev/mesto-project/issues"
+  },
+  "homepage": "https://github.com/AlexeyKondratjev/mesto-project#readme",
+  "devDependencies": {
+    "@babel/core": "^7.17.9",
+    "babel-loader": "^8.2.5",
+    "@babel/preset-env": "^6.14.16",
+    "clean-webpack-plugin": "^4.0.0",
+    "html-webpack-plugin": "^5.5.0",
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2",
+    "webpack-dev-server": "^4.8.1"
+  },
+  "dependencies": {
+    "core-js": "^3.22.3"
+  }
+}
