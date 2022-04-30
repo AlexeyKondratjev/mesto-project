@@ -1,3 +1,6 @@
+//Импорт главного файла стилей. 
+import '../pages/index.css';
+
 //Импорт данных из других модулей.
 import {profileEditButton, elementAddButton, profileEditPopup, profileEditPopupCloseButton, profileEditForm,
   elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup, imagePreviewPopupCloseButton,
