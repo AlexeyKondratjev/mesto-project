@@ -6,6 +6,7 @@ const profileEditPopup = document.querySelector('.popup_type_profileEdit');
 const profileEditPopupCloseButton = profileEditPopup.querySelector('.popup__toggle');
 const profileEditForm = document.forms.profileEditForm;
 
+const popups = document.querySelectorAll('.popup');
 const elementAddPopup = document.querySelector('.popup_type_elementAdd');
 const elementAddPopupCloseButton = elementAddPopup.querySelector('.popup__toggle');
 const elementAddForm = document.forms.elementAddForm;
@@ -52,4 +53,4 @@ const initialCards = [
 //Экспорт констант из модуля.
 export {profileEditButton, elementAddButton, profileEditPopup, profileEditPopupCloseButton, profileEditForm,
   elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup, imagePreviewPopupCloseButton,
-  elementContainer, userName, aboutYourself, profileTitle, profileSubtitle, initialCards};
+  popups, elementContainer, userName, aboutYourself, profileTitle, profileSubtitle, initialCards};
