@@ -9,6 +9,7 @@ import {profileEditButton, elementAddButton, profileEditPopup, profileEditPopupC
 import {getElementMarkup, createCard} from './card.js';
 import {openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup} from './modal.js';
 import {toggleButtonState, enableValidation} from './validate.js';
+import {getInitialCards} from './api.js';
 
 
 
