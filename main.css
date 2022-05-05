@@ -13,12 +13,14 @@
 .popup_type_imagePreview{background:rgba(0,0,0,.9)}
 .popup_opened{opacity:1;visibility:visible}
 .popup__container{align-items:center;background-color:#fff;border-radius:10px;box-shadow:0 0 25px rgba(0,0,0,.15);color:#000;display:flex;flex-direction:column;margin-top:195px;min-height:330px;min-width:282px;position:relative;width:33.59vw}@media (max-width:425px){.popup__container{margin-top:118px;min-height:322px}}
+.popup__container_type_deleteConfirm{max-width:430px;min-height:181px}
 .popup__container_type_avatarEdit{max-width:430px;min-height:272px}
 .popup__container_type_profileEdit{max-width:430px}
 .popup__container_type_elementAdd{max-width:430px}
 .popup__container_type_imagePreview{align-items:flex-start;align-self:center;background-color:transparent;border-radius:0;box-shadow:none;color:#fff;margin-top:0;min-height:auto;min-width:auto;width:auto}
 .popup__toggle{background-image:url(039f1f5203f653b4bacd.svg);background-size:cover;cursor:pointer;display:flex;height:32px;position:absolute;right:-40px;top:-40px;width:32px}.popup__toggle:hover{opacity:.6}@media (max-width:768px){.popup__toggle{height:26px;right:-32px;top:-32px;width:26px}}@media (max-width:425px){.popup__toggle{height:20px;right:0;top:-36px;width:20px}}
 .popup__heading{font-size:24px;font-weight:900;line-height:29px;margin:34px 0 47px;width:83.25%}@media (max-width:768px){.popup__heading{font-size:20px;line-height:24px}}@media (max-width:425px){.popup__heading{font-size:18px;line-height:22px;margin-bottom:73px;margin-top:26px}}
+.popup__heading_type_narrow{margin-bottom:32px}
 .popup__form{width:83.25%}
 .popup__image{max-height:75vh;max-width:75vw}
 .popup__image-heading{font-size:12px;font-weight:400;line-height:15px;margin:10px 0 0}
