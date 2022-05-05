@@ -1,7 +1,7 @@
 //Импорт данных из других модулей.
 import {
-  profileEditPopup, elementAddPopup, elementAddForm, imagePreviewPopup, elementContainer, userName,
-  aboutYourself, profileTitle, profileSubtitle
+  avatarEditPopup, profileEditPopup, elementAddPopup, elementAddForm, imagePreviewPopup, elementContainer, avatarSrc,
+  userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar
 } from './utils.js';
 import { toggleButtonState } from './validate.js';
 
@@ -30,6 +30,13 @@ function closePopup(popup) {
   popup.classList.remove('popup_opened');
 }
 
+//Функция открывает попап редактирования данных аватара профиля пользователя.
+function openAvatarEditPopup() {
+  avatarSrc.value = profileAvatar.src;
+
+  openPopup(avatarEditPopup);
+}
+
 //Функция открывает попап редактирования данных профиля пользователя.
 function openProfileEditPopup() {
   userName.value = profileTitle.textContent;
@@ -48,7 +55,23 @@ function openImagePreviewPopup() {
   openPopup(imagePreviewPopup);
 }
 
+//Функция отображает процесс загрузки данных в модальных окнах.
+//Принимает на вход параметры isLoading (булев тип данных; признак того - загрузка активна, или нет) и 
+//formElement (элемент - форма, отображение кнопки сабмита, которой изменяется в соответствии со статусом загрузки).
+function renderLoadingProcess(isLoading, formElement) {
+ const buttonElement = formElement.querySelector('.form__button');
+
+  if (isLoading) {
+    buttonElement.textContent = buttonElement.textContent + '...';
+  } else {
+    buttonElement.textContent = buttonElement.textContent.replace('...', '');
+  }
+}
+
 
 
 //Экспорт функций из модуля.
-export {openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup};
+export {
+  openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup,
+  renderLoadingProcess
+};

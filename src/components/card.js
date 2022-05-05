@@ -1,13 +1,19 @@
 //Импорт данных из других модулей.
 import { imagePreviewPopup } from './utils.js';
 import { openImagePreviewPopup } from './modal.js';
+import { removeCard, changeLikesData } from './api.js';
 
 //Функция getElementMarkup получает шаблон элемента "карточка места" из HTML-разметки
 //и возвращает клон соотв. узла DOM.
-function getElementMarkup() {
+function getElementMarkup(deleteButtonAvailable) {
   const elementTemplate = document.querySelector('#element-template').content;
+  const cloneNode = elementTemplate.querySelector('.element').cloneNode(true);
 
-  return elementTemplate.querySelector('.element').cloneNode(true);
+  if (!deleteButtonAvailable) {
+    cloneNode.querySelector('.element__delete-button').remove();
+  }
+
+  return cloneNode;
 }
 
 //Функция setEventListeners принимает на вход параметр elementMarkup (HTML-разметка (шаблон) нового элемента "карточка места")
@@ -30,21 +36,69 @@ function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
 
   elementMarkup.querySelector('.element__like-button').addEventListener('click', function (evt) {
     evt.target.classList.toggle('like-button_active');
+
+    //Определяем метод запроса (что будем делать с лайками - добавлять, или удалять).
+    const queryMethod = evt.target.classList.contains('like-button_active') ? 'PUT' : 'DELETE';
+
+    //Изменяем информацию о лайках на сервере.
+    changeLikesData(evt.target.closest('.element').id, queryMethod)
+      .then((result) => {
+        //Обновляем отображение значения счетчика лайков в карточке (на клиенте).
+        const likesCountElement = evt.target.closest('.element').querySelector('.element__likes-count');
+        likesCountElement.textContent = result.likes.length;
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   });
 
-  elementMarkup.querySelector('.element__delete-button').addEventListener('click', function (evt) {
-    const deletedElement = evt.target.closest('.element');
-    deletedElement.remove();
+  const deleteButton = elementMarkup.querySelector('.element__delete-button');
+
+  if (deleteButton) {
+    deleteButton.addEventListener('click', function (evt) {
+      const deletedElement = evt.target.closest('.element');
+
+      //Удаляем карточку на сервере.
+      removeCard(deletedElement.id)
+        .then((result) => {
+          //Удаляем карточку на клиенте.
+          deletedElement.remove();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    });
+  }
+}
+
+//Функция likedByCurrentUser принимает на вход параметры currentUserId (уникальный идентификатор текущего пользователя) 
+//и cardLikesArray (массив данных о пользователях, лайкнувших данную карточку).
+//Возвращает true, если текущий пользователь есть среди пользователей, лайкнувших карточку, иначе - false.
+function likedByCurrentUser(currentUserId, cardLikesArray) {
+  return cardLikesArray.some((arrItem) => {
+    return arrItem._id === currentUserId;
   });
 }
 
 //Функция createCard принимает на вход параметры elementMarkup (HTML-разметка (шаблон) нового элемента "карточка места"),
-//imgSrcValue (URL-адрес "карточки места") и titleValue (название "карточки места").
+//imgSrcValue (URL-адрес "карточки места"), titleValue (название "карточки места"), idValue (уникальный идентификатор 
+//"карточки места") и likesCountValue (количество лайеков).
 //Выполняет создание элемента новой "карточки места", заполняя шаблон данными, и устанавливая обработчики интерактивных событий.
 //Возвращает HTML-разметку готового элемента "карточки места".
-function createCard(elementMarkup, imgSrcValue, titleValue) {
+function createCard(elementMarkup, imgSrcValue, titleValue, idValue, likesArray, currentUserId) {
   elementMarkup.querySelector('.element__title').textContent = titleValue;
+  elementMarkup.id = idValue;
 
+  //Задаем состояние кнопки лайка (лайкнул ли карточку текущий пользователь) и количество лайков в целом.
+  if (likedByCurrentUser(currentUserId, likesArray)) {
+    elementMarkup.querySelector('.element__like-button').classList.add('like-button_active');    
+  } else {
+    elementMarkup.querySelector('.element__like-button').classList.remove('like-button_active');
+  };
+
+  elementMarkup.querySelector('.element__likes-count').textContent = likesArray.length;
+
+  //Устанавливаем обработчики событий для активных элементов карточки.
   setEventListeners(elementMarkup, imgSrcValue, titleValue);
 
   return elementMarkup;

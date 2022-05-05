@@ -1,9 +1,12 @@
 //Объявление констант.
+const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
 const profileEditButton = document.querySelector('.profile__edit-button');
 const elementAddButton = document.querySelector('.profile__add-button');
 
+const avatarEditPopup = document.querySelector('.popup_type_avatarEdit');
 const profileEditPopup = document.querySelector('.popup_type_profileEdit');
 const profileEditPopupCloseButton = profileEditPopup.querySelector('.popup__toggle');
+const avatarEditForm = document.forms.avatarEditForm;
 const profileEditForm = document.forms.profileEditForm;
 
 const popups = document.querySelectorAll('.popup');
@@ -16,41 +19,17 @@ const imagePreviewPopupCloseButton = imagePreviewPopup.querySelector('.popup__to
 
 const elementContainer = document.querySelector('.elements');
 
+const avatarSrc = avatarEditForm.avatarSrc;
 const userName = profileEditForm.userName;
 const aboutYourself = profileEditForm.aboutYourself;
 const profileTitle = document.querySelector('.profile__title');
 const profileSubtitle = document.querySelector('.profile__subtitle');
-
-//Массив с данными карточек "мест", заполняемых по умолчанию.
-const initialCards = [
-  {
-    name: 'Архыз',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg'
-  },
-  {
-    name: 'Челябинская область',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg'
-  },
-  {
-    name: 'Иваново',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg'
-  },
-  {
-    name: 'Камчатка',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg'
-  },
-  {
-    name: 'Холмогорский район',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg'
-  },
-  {
-    name: 'Байкал',
-    link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
-  }
-];
-
+const profileAvatar = document.querySelector('.profile__avatar');
 
 //Экспорт констант из модуля.
-export {profileEditButton, elementAddButton, profileEditPopup, profileEditPopupCloseButton, profileEditForm,
-  elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup, imagePreviewPopupCloseButton,
-  popups, elementContainer, userName, aboutYourself, profileTitle, profileSubtitle, initialCards};
+export {
+  avatarEditButton, profileEditButton, elementAddButton, avatarEditPopup, profileEditPopup, profileEditPopupCloseButton,
+  avatarEditForm, profileEditForm, elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup, 
+  imagePreviewPopupCloseButton, popups, elementContainer, avatarSrc, userName, aboutYourself, profileTitle, profileSubtitle, 
+  profileAvatar
+};

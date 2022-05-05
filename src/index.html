@@ -11,6 +11,18 @@
 
   <div class="page">
 
+    <section class="popup popup_type_avatarEdit">
+      <div class="popup__container popup__container_type_avatarEdit">
+        <div class="popup__toggle"></div>
+        <h2 class="popup__heading">Обновить аватар</h2>
+        <form name="avatarEditForm" class="popup__form form" novalidate>
+          <input id="avatarSrc-input" type="url" name="avatarSrc" placeholder="Ссылка на картинку" class="form__item" required>
+          <span class="avatarSrc-input-error form__error form__error_type_wide"></span>
+          <button type="submit" class="form__button">Сохранить</button>
+        </form>
+      </div>
+    </section>
+
     <section class="popup popup_type_profileEdit">
       <div class="popup__container popup__container_type_profileEdit">
         <div class="popup__toggle"></div>
@@ -63,13 +75,14 @@
 
       <section class="profile">
         <div class="profile__avatar-and-info-group">
-          <img src="<%=require('./images/Kusto.jpg')%>" alt="Фото профиля." class="profile__avatar">
+          <img src="" alt="Фото профиля." class="profile__avatar">
+          <button type="button" class="profile__avatar-edit-button profile__avatar"></button>
           <div class="profile__info">
             <div class="profile__title-with-button-group">
-              <h1 class="profile__title page__nowrap-title">Жак-Ив Кусто</h1>
+              <h1 class="profile__title page__nowrap-title"></h1>
               <button type="button" class="profile__edit-button edit-button"></button>
             </div>
-            <p class="profile__subtitle page__nowrap-title">Исследователь океана</p>
+            <p class="profile__subtitle page__nowrap-title"></p>
           </div>
         </div>
         <button type="button" class="profile__add-button add-button"></button>
@@ -92,7 +105,10 @@
       <img src="" alt="" class="element__image">
       <div class="element__footer">
         <p class="element__title page__nowrap-title"></p>
-        <button type="button" class="element__like-button like-button"></button>
+        <div class="element__like-panel">
+          <button type="button" class="element__like-button like-button"></button>
+          <p class="element__likes-count"></p>
+        </div>
         <button type="button" class="element__delete-button delete-button"></button>
       </div>
     </article>
