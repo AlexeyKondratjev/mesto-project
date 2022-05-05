@@ -8,7 +8,7 @@ const config = {
 
 //Функция getInitialCards обращается к серверу и получает данные всех карточкек учебной группы.
 const getInitialCards = () => {
-  return fetch(`${config.baseUrl}/cards`, {headers: config.headers})
+  return fetch(`${config.baseUrl}/cards`, { headers: config.headers })
     .then(res => {
       if (res.ok) {
         return res.json();
@@ -20,7 +20,7 @@ const getInitialCards = () => {
 
 //Функция getProfileData обращается к серверу и получает данные профиля текущего пользователя.
 const getProfileData = () => {
-  return fetch(`${config.baseUrl}/users/me`, {headers: config.headers})
+  return fetch(`${config.baseUrl}/users/me`, { headers: config.headers })
     .then(res => {
       if (res.ok) {
         return res.json();
@@ -34,10 +34,11 @@ const getProfileData = () => {
 //данные аватара профиля текущего пользователя (ссылку на изображение).
 //Принимает на вход параметр avatarData (объект со сcылкой на изображение (ключ: "avatar"), которое необходимо сохранить).
 const editAvatarData = (avatarData) => {
-  return fetch(`${config.baseUrl}/users/me/avatar`, { 
-    method: 'PATCH', 
+  return fetch(`${config.baseUrl}/users/me/avatar`, {
+    method: 'PATCH',
     headers: config.headers,
-    body: JSON.stringify(avatarData)})
+    body: JSON.stringify(avatarData)
+  })
     .then(res => {
       if (res.ok) {
         return res.json();
@@ -51,10 +52,11 @@ const editAvatarData = (avatarData) => {
 //данные профиля текущего пользователя.
 //Принимает на вход параметр profileData (объект с данными пользователя (ключи: "name", "about"), которые необходимо сохранить).
 const editProfileData = (profileData) => {
-  return fetch(`${config.baseUrl}/users/me`, { 
-    method: 'PATCH', 
+  return fetch(`${config.baseUrl}/users/me`, {
+    method: 'PATCH',
     headers: config.headers,
-    body: JSON.stringify(profileData)})
+    body: JSON.stringify(profileData)
+  })
     .then(res => {
       if (res.ok) {
         return res.json();
@@ -67,10 +69,11 @@ const editProfileData = (profileData) => {
 //Функция addNewCard обращается к серверу и сохраняет там данные новой карточки.
 //Принимает на вход параметр cardData (объект с данными карточки (ключи: "name", "link"), которые необходимо сохранить).
 const addNewCard = (cardData) => {
-  return fetch(`${config.baseUrl}/cards`, { 
-    method: 'POST', 
+  return fetch(`${config.baseUrl}/cards`, {
+    method: 'POST',
     headers: config.headers,
-    body: JSON.stringify(cardData)})
+    body: JSON.stringify(cardData)
+  })
     .then(res => {
       if (res.ok) {
         return res.json();
@@ -83,9 +86,10 @@ const addNewCard = (cardData) => {
 //Функция removeCard обращается к серверу и удаляет там данные карточки.
 //Принимает на вход параметр cardId (уникальный идентификатор карточки, которую нужно удалить).
 const removeCard = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, { 
-    method: 'DELETE', 
-    headers: config.headers})
+  return fetch(`${config.baseUrl}/cards/${cardId}`, {
+    method: 'DELETE',
+    headers: config.headers
+  })
     .then(res => {
       if (res.ok) {
         return res.json();
@@ -99,9 +103,10 @@ const removeCard = (cardId) => {
 //Принимает на вход параметры cardId (уникальный идентификатор карточки, информацию о лайках которой надо изменить) и
 //queryMethod (метод запроса: "PUT" - для добавления лайка, "DELETE" - для удаления лайка).
 const changeLikesData = (cardId, queryMethod) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, { 
-    method: queryMethod, 
-    headers: config.headers})
+  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
+    method: queryMethod,
+    headers: config.headers
+  })
     .then(res => {
       if (res.ok) {
         return res.json();

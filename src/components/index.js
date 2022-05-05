@@ -6,14 +6,15 @@ import '../pages/index.css';
 import {
   avatarEditButton, profileEditButton, elementAddButton, profileEditPopup, profileEditPopupCloseButton, avatarEditForm,
   profileEditForm, elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup, imagePreviewPopupCloseButton,
-  elementContainer, avatarSrc, userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, popups, avatarEditPopup
+  elementContainer, avatarSrc, userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, popups, avatarEditPopup,
+  deleteConfirmPopup, deleteConfirmForm
 } from './utils.js';
 import { getElementMarkup, createCard } from './card.js';
-import { 
+import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup, renderLoadingProcess
 } from './modal.js';
 import { toggleButtonState, enableValidation } from './validate.js';
-import { getInitialCards, getProfileData, editAvatarData, editProfileData, addNewCard } from './api.js';
+import { getInitialCards, getProfileData, editAvatarData, editProfileData, addNewCard, removeCard } from './api.js';
 
 
 
@@ -21,10 +22,9 @@ import { getInitialCards, getProfileData, editAvatarData, editProfileData, addNe
 let currentUserId = '';
 
 
-
 //Функция insertNewElement принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
-export default function insertNewElement(card, container) {
+function insertNewElement(card, container) {
   container.prepend(card);
 }
 
@@ -113,6 +113,28 @@ function elementAddFormSubmitHandler(evt) {
     });
 }
 
+//Функция-обработчик события "submit" формы подтверждения удаления карточки "места".
+function deleteConfirmFormSubmitHandler(evt) {
+  const deletedCardId = evt.target.closest('.popup').id;
+  evt.target.closest('.popup').id = '';
+
+  const previousButtonTextContent = renderLoadingProcess(true, deleteConfirmForm, '');
+
+  //Удаляем карточку на сервере.
+  removeCard(deletedCardId)
+    .then((result) => {
+      //Удаляем карточку на клиенте.
+      document.getElementById(deletedCardId).remove();
+      closePopup(deleteConfirmPopup);
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoadingProcess(false, deleteConfirmForm, previousButtonTextContent);
+    });
+}
+
 
 
 //Назначение обработчиков событий для элементов интерфейса.
@@ -131,7 +153,7 @@ popups.forEach((popupItem) => {
 avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
 profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
 elementAddForm.addEventListener('submit', elementAddFormSubmitHandler);
-
+deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 
 //Подгрузка и отображение на странице данных профиля текущего пользователя.
@@ -171,4 +193,3 @@ enableValidation({
   inputErrorClass: 'form__item_type_error',
   errorClass: 'form__error_visible'
 });
-

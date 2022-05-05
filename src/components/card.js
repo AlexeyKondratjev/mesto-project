@@ -1,6 +1,6 @@
 //Импорт данных из других модулей.
 import { imagePreviewPopup } from './utils.js';
-import { openImagePreviewPopup } from './modal.js';
+import { openImagePreviewPopup, openDeleteConfirmPopup } from './modal.js';
 import { removeCard, changeLikesData } from './api.js';
 
 //Функция getElementMarkup получает шаблон элемента "карточка места" из HTML-разметки
@@ -55,19 +55,7 @@ function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
   const deleteButton = elementMarkup.querySelector('.element__delete-button');
 
   if (deleteButton) {
-    deleteButton.addEventListener('click', function (evt) {
-      const deletedElement = evt.target.closest('.element');
-
-      //Удаляем карточку на сервере.
-      removeCard(deletedElement.id)
-        .then((result) => {
-          //Удаляем карточку на клиенте.
-          deletedElement.remove();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    });
+    deleteButton.addEventListener('click', openDeleteConfirmPopup);
   }
 }
 
@@ -91,7 +79,7 @@ function createCard(elementMarkup, imgSrcValue, titleValue, idValue, likesArray,
 
   //Задаем состояние кнопки лайка (лайкнул ли карточку текущий пользователь) и количество лайков в целом.
   if (likedByCurrentUser(currentUserId, likesArray)) {
-    elementMarkup.querySelector('.element__like-button').classList.add('like-button_active');    
+    elementMarkup.querySelector('.element__like-button').classList.add('like-button_active');
   } else {
     elementMarkup.querySelector('.element__like-button').classList.remove('like-button_active');
   };

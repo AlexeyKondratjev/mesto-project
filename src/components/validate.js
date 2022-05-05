@@ -2,14 +2,14 @@
 //Возвращает true в случае, если хотя бы одно поле из массива не валидно. В противном случае - возвращает false.
 function hasInvalidInput(inputList) {
   return inputList.some((inputElement) => {
-     return !inputElement.validity.valid;
+    return !inputElement.validity.valid;
   })
 };
 
 //Функция принимает на вход параметры inputList (массив полей ввода), buttonElement (элемент кнопки) и
 //settingsObject (настройки значений классов). В зависимости от валидности полей делает кнопку активной, либо нет.
 function toggleButtonState(inputList, buttonElement, settingssObject) {
-   if (hasInvalidInput(inputList)) {
+  if (hasInvalidInput(inputList)) {
     buttonElement.classList.add(settingssObject.inactiveButtonClass);
     buttonElement.disabled = true;
   } else {
@@ -88,4 +88,4 @@ function enableValidation(settingsObject) {
 };
 
 //Экспорт функций из модуля.
-export {toggleButtonState, enableValidation};
+export { toggleButtonState, enableValidation };

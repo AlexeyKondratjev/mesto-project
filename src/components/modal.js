@@ -1,10 +1,10 @@
 //Импорт данных из других модулей.
 import {
   avatarEditPopup, profileEditPopup, elementAddPopup, elementAddForm, imagePreviewPopup, elementContainer, avatarSrc,
-  userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar
+  userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, deleteConfirmPopup
 } from './utils.js';
 import { toggleButtonState } from './validate.js';
-
+import { deletedCardId } from './index.js';
 
 
 //Функция closePopupByEscapeKey - обработчик закрытия попапа по нажатию на клавишу "Escape".
@@ -55,6 +55,13 @@ function openImagePreviewPopup() {
   openPopup(imagePreviewPopup);
 }
 
+//Функция открывает попап подтверждения удаления карточки.
+function openDeleteConfirmPopup(evt) {
+  deleteConfirmPopup.id = evt.target.closest('.element').id;
+
+  openPopup(deleteConfirmPopup);
+}
+
 //Функция отображает процесс загрузки данных в модальных окнах.
 //Принимает на вход параметры isLoading (булев тип данных; признак того - загрузка активна, или нет), 
 //formElement (элемент - форма, текст кнопки сабмита, которой изменяется в соответствии со статусом загрузки)
@@ -78,5 +85,5 @@ function renderLoadingProcess(isLoading, formElement, previousTextContent) {
 //Экспорт функций из модуля.
 export {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup,
-  renderLoadingProcess
+  renderLoadingProcess, openDeleteConfirmPopup
 };
