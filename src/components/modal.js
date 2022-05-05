@@ -56,16 +56,21 @@ function openImagePreviewPopup() {
 }
 
 //Функция отображает процесс загрузки данных в модальных окнах.
-//Принимает на вход параметры isLoading (булев тип данных; признак того - загрузка активна, или нет) и 
-//formElement (элемент - форма, отображение кнопки сабмита, которой изменяется в соответствии со статусом загрузки).
-function renderLoadingProcess(isLoading, formElement) {
- const buttonElement = formElement.querySelector('.form__button');
+//Принимает на вход параметры isLoading (булев тип данных; признак того - загрузка активна, или нет), 
+//formElement (элемент - форма, текст кнопки сабмита, которой изменяется в соответствии со статусом загрузки)
+//и previousTextContent (предыдущее значение текста кнопки).
+//Возвращает предыдущее значение текста кнопки (до изменения в теле функции).
+function renderLoadingProcess(isLoading, formElement, previousTextContent) {
+  const buttonElement = formElement.querySelector('.form__button');
+  const previousValue = buttonElement.textContent;
 
   if (isLoading) {
-    buttonElement.textContent = buttonElement.textContent + '...';
+    buttonElement.textContent = 'Сохранение...';
   } else {
-    buttonElement.textContent = buttonElement.textContent.replace('...', '');
+    buttonElement.textContent = previousTextContent;
   }
+
+  return previousValue;
 }
 
 

@@ -32,7 +32,7 @@ export default function insertNewElement(card, container) {
 function avatarEditFormSubmitHandler(evt) {
   evt.preventDefault();
 
-  renderLoadingProcess(true, avatarEditForm);
+  const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
 
   //Сохраняем отредактированные данные на сервере.
   editAvatarData({ avatar: avatarSrc.value })
@@ -44,7 +44,7 @@ function avatarEditFormSubmitHandler(evt) {
       console.log(err);
     })
     .finally(() => {
-      renderLoadingProcess(false, avatarEditForm);
+      renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
     });
 }
 
@@ -52,7 +52,7 @@ function avatarEditFormSubmitHandler(evt) {
 function profileEditFormSubmitHandler(evt) {
   evt.preventDefault();
 
-  renderLoadingProcess(true, profileEditForm);
+  const previousButtonTextContent = renderLoadingProcess(true, profileEditForm, '');
 
   //Сохраняем отредактированные данные на сервере.
   const editedProfileData = {
@@ -70,7 +70,7 @@ function profileEditFormSubmitHandler(evt) {
       console.log(err);
     })
     .finally(() => {
-      renderLoadingProcess(false, profileEditForm);
+      renderLoadingProcess(false, profileEditForm, previousButtonTextContent);
     });
 }
 
@@ -78,7 +78,7 @@ function profileEditFormSubmitHandler(evt) {
 function elementAddFormSubmitHandler(evt) {
   evt.preventDefault();
 
-  renderLoadingProcess(true, elementAddForm);
+  const previousButtonTextContent = renderLoadingProcess(true, elementAddForm, '');
 
   //Сохраняем данные карточки на сервере.
   const newCardData = {
@@ -109,7 +109,7 @@ function elementAddFormSubmitHandler(evt) {
       console.log(err);
     })
     .finally(() => {
-      renderLoadingProcess(false, elementAddForm);
+      renderLoadingProcess(false, elementAddForm, previousButtonTextContent);
     });
 }
 
