@@ -29,12 +29,37 @@ const profileTitle = document.querySelector('.profile__title');
 const profileSubtitle = document.querySelector('.profile__subtitle');
 const profileAvatar = document.querySelector('.profile__avatar');
 
+const validationOptions = {
+  formSelector: '.popup__form',
+  inputSelector: '.form__item',
+  submitButtonSelector: '.form__button',
+  inactiveButtonClass: 'form__button_disabled',
+  inputErrorClass: 'form__item_type_error',
+  errorClass: 'form__error_visible'
+};
 
+//Функция отображает процесс загрузки данных в модальных окнах.
+//Принимает на вход параметры isLoading (булев тип данных; признак того - загрузка активна, или нет), 
+//formElement (элемент - форма, текст кнопки сабмита, которой изменяется в соответствии со статусом загрузки)
+//и previousTextContent (предыдущее значение текста кнопки).
+//Возвращает предыдущее значение текста кнопки (до изменения в теле функции).
+function renderLoadingProcess(isLoading, formElement, previousTextContent) {
+  const buttonElement = formElement.querySelector('.form__button');
+  const previousValue = buttonElement.textContent;
+
+  if (isLoading) {
+    buttonElement.textContent = 'Сохранение...';
+  } else {
+    buttonElement.textContent = previousTextContent;
+  }
+
+  return previousValue;
+}
 
 //Экспорт констант из модуля.
 export {
   avatarEditButton, profileEditButton, elementAddButton, deleteConfirmPopup, avatarEditPopup, profileEditPopup, profileEditPopupCloseButton,
   avatarEditForm, profileEditForm, elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup,
   imagePreviewPopupCloseButton, popups, elementContainer, avatarSrc, userName, aboutYourself, profileTitle, profileSubtitle,
-  profileAvatar, deleteConfirmForm
+  profileAvatar, deleteConfirmForm, validationOptions, renderLoadingProcess
 };

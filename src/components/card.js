@@ -3,15 +3,14 @@ import { imagePreviewPopup } from './utils.js';
 import { openImagePreviewPopup, openDeleteConfirmPopup } from './modal.js';
 import { removeCard, changeLikesData } from './api.js';
 
+
+let deletedCardId = '';
+
 //Функция getElementMarkup получает шаблон элемента "карточка места" из HTML-разметки
 //и возвращает клон соотв. узла DOM.
-function getElementMarkup(deleteButtonAvailable) {
+function getElementMarkup() {
   const elementTemplate = document.querySelector('#element-template').content;
   const cloneNode = elementTemplate.querySelector('.element').cloneNode(true);
-
-  if (!deleteButtonAvailable) {
-    cloneNode.querySelector('.element__delete-button').remove();
-  }
 
   return cloneNode;
 }
@@ -55,7 +54,10 @@ function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
   const deleteButton = elementMarkup.querySelector('.element__delete-button');
 
   if (deleteButton) {
-    deleteButton.addEventListener('click', openDeleteConfirmPopup);
+    deleteButton.addEventListener('click', (evt) => {
+      deletedCardId = evt.target.closest('.element').id;
+      openDeleteConfirmPopup();
+    });
   }
 }
 
@@ -73,7 +75,7 @@ function likedByCurrentUser(currentUserId, cardLikesArray) {
 //"карточки места") и likesCountValue (количество лайеков).
 //Выполняет создание элемента новой "карточки места", заполняя шаблон данными, и устанавливая обработчики интерактивных событий.
 //Возвращает HTML-разметку готового элемента "карточки места".
-function createCard(elementMarkup, imgSrcValue, titleValue, idValue, likesArray, currentUserId) {
+function createCard(elementMarkup, imgSrcValue, titleValue, idValue, likesArray, currentUserId, cardOwnerId) {
   elementMarkup.querySelector('.element__title').textContent = titleValue;
   elementMarkup.id = idValue;
 
@@ -86,6 +88,11 @@ function createCard(elementMarkup, imgSrcValue, titleValue, idValue, likesArray,
 
   elementMarkup.querySelector('.element__likes-count').textContent = likesArray.length;
 
+  //Определяем наличие кнопки удаления карточки (по условию: удалять можно только свои карточки).
+  if (currentUserId !== cardOwnerId) {
+    elementMarkup.querySelector('.element__delete-button').remove();
+  }
+
   //Устанавливаем обработчики событий для активных элементов карточки.
   setEventListeners(elementMarkup, imgSrcValue, titleValue);
 
@@ -94,4 +101,4 @@ function createCard(elementMarkup, imgSrcValue, titleValue, idValue, likesArray,
 
 
 //Экспорт функций из модуля.
-export { getElementMarkup, createCard };
+export { deletedCardId, getElementMarkup, createCard };

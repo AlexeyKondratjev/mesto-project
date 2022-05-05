@@ -1,7 +1,7 @@
 //Импорт данных из других модулей.
 import {
   avatarEditPopup, profileEditPopup, elementAddPopup, elementAddForm, imagePreviewPopup, elementContainer, avatarSrc,
-  userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, deleteConfirmPopup
+  userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, deleteConfirmPopup, popups
 } from './utils.js';
 import { toggleButtonState } from './validate.js';
 import { deletedCardId } from './index.js';
@@ -56,34 +56,23 @@ function openImagePreviewPopup() {
 }
 
 //Функция открывает попап подтверждения удаления карточки.
-function openDeleteConfirmPopup(evt) {
-  deleteConfirmPopup.id = evt.target.closest('.element').id;
-
+function openDeleteConfirmPopup() {
   openPopup(deleteConfirmPopup);
 }
 
-//Функция отображает процесс загрузки данных в модальных окнах.
-//Принимает на вход параметры isLoading (булев тип данных; признак того - загрузка активна, или нет), 
-//formElement (элемент - форма, текст кнопки сабмита, которой изменяется в соответствии со статусом загрузки)
-//и previousTextContent (предыдущее значение текста кнопки).
-//Возвращает предыдущее значение текста кнопки (до изменения в теле функции).
-function renderLoadingProcess(isLoading, formElement, previousTextContent) {
-  const buttonElement = formElement.querySelector('.form__button');
-  const previousValue = buttonElement.textContent;
 
-  if (isLoading) {
-    buttonElement.textContent = 'Сохранение...';
-  } else {
-    buttonElement.textContent = previousTextContent;
-  }
-
-  return previousValue;
-}
+//Задаем для всех попапов обработчики события "mousedown" для возможности закрытия по клику на оверлее. 
+popups.forEach((popupItem) => {
+  popupItem.addEventListener('mousedown', (evt) => {
+    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__toggle')) {
+      closePopup(popupItem);
+    }
+  });
+});
 
 
 
 //Экспорт функций из модуля.
 export {
-  openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup,
-  renderLoadingProcess, openDeleteConfirmPopup
+  openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup, openDeleteConfirmPopup
 };

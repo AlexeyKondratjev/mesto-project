@@ -6,12 +6,12 @@ import '../pages/index.css';
 import {
   avatarEditButton, profileEditButton, elementAddButton, profileEditPopup, profileEditPopupCloseButton, avatarEditForm,
   profileEditForm, elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup, imagePreviewPopupCloseButton,
-  elementContainer, avatarSrc, userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, popups, avatarEditPopup,
-  deleteConfirmPopup, deleteConfirmForm
+  elementContainer, avatarSrc, userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, avatarEditPopup,
+  deleteConfirmPopup, deleteConfirmForm, validationOptions, renderLoadingProcess
 } from './utils.js';
-import { getElementMarkup, createCard } from './card.js';
+import { deletedCardId, getElementMarkup, createCard } from './card.js';
 import {
-  openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup, renderLoadingProcess
+  openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup
 } from './modal.js';
 import { toggleButtonState, enableValidation } from './validate.js';
 import { getInitialCards, getProfileData, editAvatarData, editProfileData, addNewCard, removeCard } from './api.js';
@@ -89,13 +89,12 @@ function elementAddFormSubmitHandler(evt) {
   addNewCard(newCardData)
     .then((result) => {
       //Добавляем карточку на страницу.  
-      const newElementMarkup = getElementMarkup(true);
-      const newElement = createCard(newElementMarkup, result.link, result.name, result._id, [], currentUserId);
+      const newElementMarkup = getElementMarkup();
+      const newElement = createCard(newElementMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
 
       insertNewElement(newElement, elementContainer);
 
-      elementAddForm.elementSrc.value = '';
-      elementAddForm.elementName.value = '';
+      elementAddForm.reset();
 
       //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние. 
       const inputList = Array.from(elementAddForm.querySelectorAll('.form__item'));
@@ -114,10 +113,7 @@ function elementAddFormSubmitHandler(evt) {
 }
 
 //Функция-обработчик события "submit" формы подтверждения удаления карточки "места".
-function deleteConfirmFormSubmitHandler(evt) {
-  const deletedCardId = evt.target.closest('.popup').id;
-  evt.target.closest('.popup').id = '';
-
+function deleteConfirmFormSubmitHandler() {
   const previousButtonTextContent = renderLoadingProcess(true, deleteConfirmForm, '');
 
   //Удаляем карточку на сервере.
@@ -142,39 +138,29 @@ avatarEditButton.addEventListener('click', openAvatarEditPopup);
 profileEditButton.addEventListener('click', openProfileEditPopup);
 elementAddButton.addEventListener('click', openElementAddPopup);
 
-popups.forEach((popupItem) => {
-  popupItem.addEventListener('mousedown', (evt) => {
-    if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__toggle')) {
-      closePopup(popupItem);
-    }
-  });
-});
-
 avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
 profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
 elementAddForm.addEventListener('submit', elementAddFormSubmitHandler);
 deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 
-//Подгрузка и отображение на странице данных профиля текущего пользователя.
-getProfileData()
-  .then((result) => {
-    profileTitle.textContent = result.name;
-    profileSubtitle.textContent = result.about;
-    profileAvatar.src = result.avatar;
-    currentUserId = result._id;
-  })
-  .catch((err) => {
-    console.log(err);
-  });
 
-//Подгрузка и отображение на странице массива карточек по умолчанию.
-getInitialCards()
+//Подгрузка и отображение на странице данных профиля текущего пользователя и массива карточек по умолчанию.
+Promise.all([getProfileData(), getInitialCards()])
   .then((result) => {
-    result.forEach((cardItem) => {
-      const deleteButtonAvailable = cardItem.owner._id === currentUserId;
-      const newElement = createCard(getElementMarkup(deleteButtonAvailable), cardItem.link, cardItem.name, cardItem._id,
-        cardItem.likes, currentUserId);
+    const profileData = result[0];
+    const initialCardsData = result[1];
+
+    //Отрисовываем данных профиля текущего пользователя.
+    profileTitle.textContent = profileData.name;
+    profileSubtitle.textContent = profileData.about;
+    profileAvatar.src = profileData.avatar;
+    currentUserId = profileData._id;
+
+    //Отрисовываем массив карточек по умолчанию.
+    initialCardsData.forEach((cardItem) => {
+      const newElement = createCard(getElementMarkup(), cardItem.link, cardItem.name, cardItem._id,
+        cardItem.likes, currentUserId, cardItem.owner._id);
 
       insertNewElement(newElement, elementContainer);
     });
@@ -184,12 +170,6 @@ getInitialCards()
   });
 
 
+
 //Активация валидации форм.
-enableValidation({
-  formSelector: '.popup__form',
-  inputSelector: '.form__item',
-  submitButtonSelector: '.form__button',
-  inactiveButtonClass: 'form__button_disabled',
-  inputErrorClass: 'form__item_type_error',
-  errorClass: 'form__error_visible'
-});
+enableValidation(validationOptions);
