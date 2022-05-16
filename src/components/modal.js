@@ -2,7 +2,7 @@
 import {
   avatarEditPopup, profileEditPopup, elementAddPopup, elementAddForm, imagePreviewPopup, elementContainer, avatarSrc,
   userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, deleteConfirmPopup, popups
-} from './utils.js';
+} from '../utils/constants.js';
 import { toggleButtonState } from './validate.js';
 //import { deletedCardId } from './index.js';
 

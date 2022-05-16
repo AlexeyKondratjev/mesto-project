@@ -2,7 +2,7 @@ export default class Api {
     constructor() {
         this.baseUrl = 'https://nomoreparties.co/v1/plus-cohort-9',
         this.headers = {
-            authorization: '48b44853-052f-4cb6-9199-05fafd5281f2',
+            authorization: '15079f84-7c32-450a-9816-73a1a409c0ce',
             'Content-Type': 'application/json'
         }
     }
@@ -13,55 +13,47 @@ export default class Api {
         return Promise.reject(`Ошибка: ${res.status}`);
     }
 
-    getUser() {
+    getProfileData() {
         return fetch(`${this.baseUrl}/users/me`, {
             headers: this.headers,
         })
         .then(this._checkResponse)
     }
 
-    getINitialCards = () => {
+    getInitialCards() {
         return fetch(`${this.baseUrl}/cards`, {
             headers: this.headers,
         })
         .then(this._checkResponse)
     }
 
-    patchUser(name, about) {
+    editProfileData(profileData) {
         return fetch(`${this.baseUrl}/users/me`, {
             method: 'PATCH',
             headers: this.headers,
-            body: JSON.stringify({
-                name: name,
-                about: about,
-            }, ['name', 'about'])
+            body: JSON.stringify(profileData)
         })
         .then(this._checkResponse);
     }
 
-    patchAvatar(avatarLink) {
+    editAvatarData(avatarData) {
         return fetch(`${this.baseUrl}/users/me/avatar`, {
             method: 'PATCH',
             headers: this.headers,
-            body: JSON.stringify({
-                avatar: avatarLink
-            }, ['avatar'])
+            body: JSON.stringify(avatarData)
         })
         .then(this._checkResponse);
     }
-    postCard(name, link) {
+    addNewCard(cardData) {
         return fetch(`${this.baseUrl}/cards`, {
             method: 'POST',
             headers: this.headers,
-            body: JSON.stringify({
-                name: name,
-                link: link,
-            }, ['name', 'link'])
+            body: JSON.stringify(cardData)
         })
         .then(this._checkResponse)
     }
 
-    deleteCard(cardId) {
+    removeCard(cardId) {
         return fetch(`${this.baseUrl}/cards/${cardId}`, {
             method: 'DELETE',
             headers: this.headers,
@@ -69,19 +61,11 @@ export default class Api {
         .then(this._checkResponse)
     }
 
-    putLikeOnCard(cardId) {
-        return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
-        method: 'PUT',
-        headers: this.headers,
-        })
-        .then(this._checkResponse)
-    }
-
-    deleteLikeOnCard(cardId) {
-        return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
-            method: 'DELETE',
-            headers: this.headers,
-        })
-        .then(this._checkResponse)
+    changeLikesData(cardId, queryMethod) {
+      return fetch(`${this.baseUrl}/cards/likes/${cardId}`, {
+        method: queryMethod,
+        headers: this.headers
+      })
+      .then(this._checkResponse);
     }
 }
