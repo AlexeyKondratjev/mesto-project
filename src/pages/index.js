@@ -1,4 +1,4 @@
-//Импорт главного файла стилей. 
+//Импорт главного файла стилей.
 import '../pages/index.css';
 
 
@@ -8,13 +8,13 @@ import {
   profileEditForm, elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup, imagePreviewPopupCloseButton,
   elementContainer, avatarSrc, userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, avatarEditPopup,
   deleteConfirmPopup, deleteConfirmForm, validationOptions, renderLoadingProcess
-} from './utils.js';
-import { deletedCardId, getElementMarkup, createCard } from './card.js';
+} from '../components/utils.js';
+import { deletedCardId, getElementMarkup, createCard } from '../components/card.js';
 import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup
-} from './modal.js';
-import { toggleButtonState, enableValidation } from './validate.js';
-import { getInitialCards, getProfileData, editAvatarData, editProfileData, addNewCard, removeCard } from './api.js';
+} from '../components/modal.js';
+import { toggleButtonState, enableValidation } from '../components/validate.js';
+import { getInitialCards, getProfileData, editAvatarData, editProfileData, addNewCard, removeCard } from '../components/api.js';
 
 
 
@@ -88,7 +88,7 @@ function elementAddFormSubmitHandler(evt) {
 
   addNewCard(newCardData)
     .then((result) => {
-      //Добавляем карточку на страницу.  
+      //Добавляем карточку на страницу.
       const newElementMarkup = getElementMarkup();
       const newElement = createCard(newElementMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
 
@@ -96,7 +96,7 @@ function elementAddFormSubmitHandler(evt) {
 
       elementAddForm.reset();
 
-      //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние. 
+      //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
       const inputList = Array.from(elementAddForm.querySelectorAll('.form__item'));
       const buttonElement = elementAddForm.querySelector('.form__button');
 
