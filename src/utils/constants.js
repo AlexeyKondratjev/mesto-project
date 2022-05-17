@@ -1,4 +1,5 @@
-import Api from '../components/Api copy.js'
+import Api from '../components/Api.js';
+
 export const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
 export const profileEditButton = document.querySelector('.profile__edit-button');
 export const elementAddButton = document.querySelector('.profile__add-button');

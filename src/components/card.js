@@ -1,7 +1,6 @@
 //Импорт данных из других модулей.
-import { imagePreviewPopup } from '../utils/constants.js';
+import { imagePreviewPopup, allFetches } from '../utils/constants.js';
 import { openImagePreviewPopup, openDeleteConfirmPopup } from './modal.js';
-import { removeCard, changeLikesData } from './api.js';
 
 
 let deletedCardId = '';
@@ -40,7 +39,7 @@ function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
     const queryMethod = evt.target.classList.contains('like-button_active') ? 'PUT' : 'DELETE';
 
     //Изменяем информацию о лайках на сервере.
-    changeLikesData(evt.target.closest('.element').id, queryMethod)
+    allFetches.changeLikesData(evt.target.closest('.element').id, queryMethod)
       .then((result) => {
         //Обновляем отображение значения счетчика лайков в карточке (на клиенте).
         const likesCountElement = evt.target.closest('.element').querySelector('.element__likes-count');

@@ -10,16 +10,11 @@ import {
   deleteConfirmPopup,
   avatarEditPopup,
   profileEditPopup,
-  profileEditPopupCloseButton,
   avatarEditForm,
   profileEditForm,
   elementAddForm,
   deleteConfirmForm,
-  popups,
   elementAddPopup,
-  elementAddPopupCloseButton,
-  imagePreviewPopup,
-  imagePreviewPopupCloseButton,
   elementContainer,
   avatarSrc,
   userName,
@@ -36,6 +31,7 @@ import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
+import Section from '../components/Section.js';
 
 
 
@@ -171,7 +167,12 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
   .then((result) => {
     const profileData = result[0];
     const initialCardsData = result[1];
-
+    // const cardList = new Section({
+    //   items: initialCardsData,
+    //   renderer: (item) => {
+    //     const card = item.isOwner
+    //   },
+    // }, 'elements' );
     //Отрисовываем данных профиля текущего пользователя.
     profileTitle.textContent = profileData.name;
     profileSubtitle.textContent = profileData.about;
