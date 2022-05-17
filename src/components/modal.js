@@ -2,9 +2,9 @@
 import {
   avatarEditPopup, profileEditPopup, elementAddPopup, elementAddForm, imagePreviewPopup, elementContainer, avatarSrc,
   userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, deleteConfirmPopup, popups
-} from './utils.js';
+} from '../utils/constants.js';
 import { toggleButtonState } from './validate.js';
-import { deletedCardId } from './index.js';
+//import { deletedCardId } from './index.js';
 
 
 //Функция closePopupByEscapeKey - обработчик закрытия попапа по нажатию на клавишу "Escape".
@@ -61,7 +61,7 @@ function openDeleteConfirmPopup() {
 }
 
 
-//Задаем для всех попапов обработчики события "mousedown" для возможности закрытия по клику на оверлее. 
+//Задаем для всех попапов обработчики события "mousedown" для возможности закрытия по клику на оверлее.
 popups.forEach((popupItem) => {
   popupItem.addEventListener('mousedown', (evt) => {
     if (evt.target.classList.contains('popup_opened') || evt.target.classList.contains('popup__toggle')) {

@@ -1,20 +1,41 @@
-//Импорт главного файла стилей. 
+//Импорт главного файла стилей.
 import '../pages/index.css';
 
 
 //Импорт данных из других модулей.
 import {
-  avatarEditButton, profileEditButton, elementAddButton, profileEditPopup, profileEditPopupCloseButton, avatarEditForm,
-  profileEditForm, elementAddPopup, elementAddPopupCloseButton, elementAddForm, imagePreviewPopup, imagePreviewPopupCloseButton,
-  elementContainer, avatarSrc, userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, avatarEditPopup,
-  deleteConfirmPopup, deleteConfirmForm, validationOptions, renderLoadingProcess
-} from './utils.js';
-import { deletedCardId, getElementMarkup, createCard } from './card.js';
+  avatarEditButton,
+  profileEditButton,
+  elementAddButton,
+  deleteConfirmPopup,
+  avatarEditPopup,
+  profileEditPopup,
+  profileEditPopupCloseButton,
+  avatarEditForm,
+  profileEditForm,
+  elementAddForm,
+  deleteConfirmForm,
+  popups,
+  elementAddPopup,
+  elementAddPopupCloseButton,
+  imagePreviewPopup,
+  imagePreviewPopupCloseButton,
+  elementContainer,
+  avatarSrc,
+  userName,
+  aboutYourself,
+  profileTitle,
+  profileSubtitle,
+  profileAvatar,
+  validationOptions,
+  allFetches,
+} from '../utils/constants.js'
+import { renderLoadingProcess } from '../components/utils.js';
+import { deletedCardId, getElementMarkup, createCard } from '../components/card.js';
 import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup
-} from './modal.js';
-import { toggleButtonState, enableValidation } from './validate.js';
-import { getInitialCards, getProfileData, editAvatarData, editProfileData, addNewCard, removeCard } from './api.js';
+} from '../components/modal.js';
+import { toggleButtonState, enableValidation } from '../components/validate.js';
 
 
 
@@ -35,7 +56,7 @@ function avatarEditFormSubmitHandler(evt) {
   const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
 
   //Сохраняем отредактированные данные на сервере.
-  editAvatarData({ avatar: avatarSrc.value })
+  allFetches.editAvatarData({ avatar: avatarSrc.value })
     .then((result) => {
       profileAvatar.src = result.avatar;
       closePopup(avatarEditPopup);
@@ -60,7 +81,7 @@ function profileEditFormSubmitHandler(evt) {
     about: aboutYourself.value
   };
 
-  editProfileData(editedProfileData)
+  allFetches.editProfileData(editedProfileData)
     .then((result) => {
       profileTitle.textContent = result.name;
       profileSubtitle.textContent = result.about;
@@ -86,9 +107,9 @@ function elementAddFormSubmitHandler(evt) {
     link: elementAddForm.elementSrc.value
   };
 
-  addNewCard(newCardData)
+  allFetches.addNewCard(newCardData)
     .then((result) => {
-      //Добавляем карточку на страницу.  
+      //Добавляем карточку на страницу.
       const newElementMarkup = getElementMarkup();
       const newElement = createCard(newElementMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
 
@@ -96,7 +117,7 @@ function elementAddFormSubmitHandler(evt) {
 
       elementAddForm.reset();
 
-      //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние. 
+      //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
       const inputList = Array.from(elementAddForm.querySelectorAll('.form__item'));
       const buttonElement = elementAddForm.querySelector('.form__button');
 
@@ -117,7 +138,7 @@ function deleteConfirmFormSubmitHandler() {
   const previousButtonTextContent = renderLoadingProcess(true, deleteConfirmForm, '');
 
   //Удаляем карточку на сервере.
-  removeCard(deletedCardId)
+  allFetches.removeCard(deletedCardId)
     .then((result) => {
       //Удаляем карточку на клиенте.
       document.getElementById(deletedCardId).remove();
@@ -146,7 +167,7 @@ deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 
 //Подгрузка и отображение на странице данных профиля текущего пользователя и массива карточек по умолчанию.
-Promise.all([getProfileData(), getInitialCards()])
+Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
   .then((result) => {
     const profileData = result[0];
     const initialCardsData = result[1];

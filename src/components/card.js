@@ -1,5 +1,5 @@
 //Импорт данных из других модулей.
-import { imagePreviewPopup } from './utils.js';
+import { imagePreviewPopup } from '../utils/constants.js';
 import { openImagePreviewPopup, openDeleteConfirmPopup } from './modal.js';
 import { removeCard, changeLikesData } from './api.js';
 
@@ -61,7 +61,7 @@ function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
   }
 }
 
-//Функция likedByCurrentUser принимает на вход параметры currentUserId (уникальный идентификатор текущего пользователя) 
+//Функция likedByCurrentUser принимает на вход параметры currentUserId (уникальный идентификатор текущего пользователя)
 //и cardLikesArray (массив данных о пользователях, лайкнувших данную карточку).
 //Возвращает true, если текущий пользователь есть среди пользователей, лайкнувших карточку, иначе - false.
 function likedByCurrentUser(currentUserId, cardLikesArray) {
@@ -71,7 +71,7 @@ function likedByCurrentUser(currentUserId, cardLikesArray) {
 }
 
 //Функция createCard принимает на вход параметры elementMarkup (HTML-разметка (шаблон) нового элемента "карточка места"),
-//imgSrcValue (URL-адрес "карточки места"), titleValue (название "карточки места"), idValue (уникальный идентификатор 
+//imgSrcValue (URL-адрес "карточки места"), titleValue (название "карточки места"), idValue (уникальный идентификатор
 //"карточки места") и likesCountValue (количество лайеков).
 //Выполняет создание элемента новой "карточки места", заполняя шаблон данными, и устанавливая обработчики интерактивных событий.
 //Возвращает HTML-разметку готового элемента "карточки места".
