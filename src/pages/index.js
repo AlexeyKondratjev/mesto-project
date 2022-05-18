@@ -6,18 +6,18 @@ import '../pages/index.css';
 import {
   avatarEditButton,
   profileEditButton,
-  elementAddButton,
+  cardAddButton,
   deleteConfirmPopup,
   avatarEditPopup,
   profileEditPopup,
   profileEditPopupCloseButton,
   avatarEditForm,
   profileEditForm,
-  elementAddForm,
+  cardAddForm,
   deleteConfirmForm,
   popups,
-  elementAddPopup,
-  elementAddPopupCloseButton,
+  cardAddPopup,
+  cardAddPopupCloseButton,
   imagePreviewPopup,
   imagePreviewPopupCloseButton,
   elementContainer,
@@ -31,9 +31,9 @@ import {
   allFetches,
 } from '../utils/constants.js'
 import { renderLoadingProcess } from '../components/utils.js';
-import { deletedCardId, getElementMarkup, createCard } from '../components/card.js';
+import { deletedCardId, getCardMarkup, createCard } from '../components/card.js';
 import {
-  openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup
+  openAvatarEditPopup, openProfileEditPopup, closePopup, openCardAddPopup, openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
 
@@ -43,9 +43,9 @@ import { toggleButtonState, enableValidation } from '../components/validate.js';
 let currentUserId = '';
 
 
-//Функция insertNewElement принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
+//Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
-function insertNewElement(card, container) {
+function insertNewCard(card, container) {
   container.prepend(card);
 }
 
@@ -96,40 +96,40 @@ function profileEditFormSubmitHandler(evt) {
 }
 
 //Функция-обработчик события "submit" формы добавления данных нового "места".
-function elementAddFormSubmitHandler(evt) {
+function cardAddFormSubmitHandler(evt) {
   evt.preventDefault();
 
-  const previousButtonTextContent = renderLoadingProcess(true, elementAddForm, '');
+  const previousButtonTextContent = renderLoadingProcess(true, cardAddForm, '');
 
   //Сохраняем данные карточки на сервере.
   const newCardData = {
-    name: elementAddForm.elementName.value,
-    link: elementAddForm.elementSrc.value
+    name: cardAddForm.cardName.value,
+    link: cardAddForm.cardSrc.value
   };
 
   allFetches.addNewCard(newCardData)
     .then((result) => {
       //Добавляем карточку на страницу.
-      const newElementMarkup = getElementMarkup();
-      const newElement = createCard(newElementMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
+      const newCardMarkup = getCardMarkup();
+      const newCard = createCard(newCardMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
 
-      insertNewElement(newElement, elementContainer);
+      insertNewCard(newCard, elementContainer);
 
-      elementAddForm.reset();
+      cardAddForm.reset();
 
       //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
-      const inputList = Array.from(elementAddForm.querySelectorAll('.form__item'));
-      const buttonElement = elementAddForm.querySelector('.form__button');
+      const inputList = Array.from(cardAddForm.querySelectorAll('.form__item'));
+      const buttonElement = cardAddForm.querySelector('.form__button');
 
       toggleButtonState(inputList, buttonElement, { inactiveButtonClass: 'form__button_disabled' });
 
-      closePopup(elementAddPopup);
+      closePopup(cardAddPopup);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoadingProcess(false, elementAddForm, previousButtonTextContent);
+      renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
     });
 }
 
@@ -157,11 +157,11 @@ function deleteConfirmFormSubmitHandler() {
 //Назначение обработчиков событий для элементов интерфейса.
 avatarEditButton.addEventListener('click', openAvatarEditPopup);
 profileEditButton.addEventListener('click', openProfileEditPopup);
-elementAddButton.addEventListener('click', openElementAddPopup);
+cardAddButton.addEventListener('click', openCardAddPopup);
 
 avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
 profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
-elementAddForm.addEventListener('submit', elementAddFormSubmitHandler);
+cardAddForm.addEventListener('submit', cardAddFormSubmitHandler);
 deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 
@@ -172,7 +172,7 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
     const profileData = result[0];
     const initialCardsData = result[1];
 
-    //Отрисовываем данных профиля текущего пользователя.
+    //Отрисовываем данные профиля текущего пользователя.
     profileTitle.textContent = profileData.name;
     profileSubtitle.textContent = profileData.about;
     profileAvatar.src = profileData.avatar;
@@ -180,10 +180,10 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
     //Отрисовываем массив карточек по умолчанию.
     initialCardsData.forEach((cardItem) => {
-      const newElement = createCard(getElementMarkup(), cardItem.link, cardItem.name, cardItem._id,
+      const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
         cardItem.likes, currentUserId, cardItem.owner._id);
 
-      insertNewElement(newElement, elementContainer);
+      insertNewCard(newCard, elementContainer);
     });
   })
   .catch((err) => {

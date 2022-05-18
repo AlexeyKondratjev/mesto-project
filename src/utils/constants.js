@@ -1,7 +1,7 @@
 import Api from '../components/Api copy.js'
 export const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
 export const profileEditButton = document.querySelector('.profile__edit-button');
-export const elementAddButton = document.querySelector('.profile__add-button');
+export const cardAddButton = document.querySelector('.profile__add-button');
 
 export const deleteConfirmPopup = document.querySelector('.popup_type_deleteConfirm');
 export const avatarEditPopup = document.querySelector('.popup_type_avatarEdit');
@@ -9,12 +9,12 @@ export const profileEditPopup = document.querySelector('.popup_type_profileEdit'
 export const profileEditPopupCloseButton = profileEditPopup.querySelector('.popup__toggle');
 export const avatarEditForm = document.forms.avatarEditForm;
 export const profileEditForm = document.forms.profileEditForm;
-export const elementAddForm = document.forms.elementAddForm;
+export const cardAddForm = document.forms.cardAddForm;
 export const deleteConfirmForm = document.forms.deleteConfirmForm;
 
 export const popups = document.querySelectorAll('.popup');
-export const elementAddPopup = document.querySelector('.popup_type_elementAdd');
-export const elementAddPopupCloseButton = elementAddPopup.querySelector('.popup__toggle');
+export const cardAddPopup = document.querySelector('.popup_type_cardAdd');
+export const cardAddPopupCloseButton = cardAddPopup.querySelector('.popup__toggle');
 
 
 export const imagePreviewPopup = document.querySelector('.popup_type_imagePreview');
