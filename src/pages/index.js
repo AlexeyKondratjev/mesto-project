@@ -14,7 +14,11 @@ import {
   profileEditForm,
   cardAddForm,
   deleteConfirmForm,
+  popups,
   cardAddPopup,
+  cardAddPopupCloseButton,
+  imagePreviewPopup,
+  imagePreviewPopupCloseButton,
   elementContainer,
   avatarSrc,
   userName,
@@ -26,9 +30,9 @@ import {
   configData
 } from '../utils/constants.js'
 import { renderLoadingProcess } from '../components/utils.js';
-import { deletedCardId, getElementMarkup, createCard } from '../components/card.js';
+import { deletedCardId, getCardMarkup, createCard } from '../components/card.js';
 import {
-  openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup
+  openAvatarEditPopup, openProfileEditPopup, closePopup, openCardAddPopup, openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
 import Api from '../components/Api';
@@ -40,9 +44,9 @@ import Section from '../components/Section.js';
 let currentUserId = '';
 const allFetches = new Api(configData);
 
-//Функция insertNewElement принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
+//Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
-function insertNewElement(card, container) {
+function insertNewCard(card, container) {
   container.prepend(card);
 }
 
@@ -93,24 +97,24 @@ function profileEditFormSubmitHandler(evt) {
 }
 
 //Функция-обработчик события "submit" формы добавления данных нового "места".
-function elementAddFormSubmitHandler(evt) {
+function cardAddFormSubmitHandler(evt) {
   evt.preventDefault();
 
   const previousButtonTextContent = renderLoadingProcess(true, cardAddForm, '');
 
   //Сохраняем данные карточки на сервере.
   const newCardData = {
-    name: cardAddForm.elementName.value,
-    link: cardAddForm.elementSrc.value
+    name: cardAddForm.cardName.value,
+    link: cardAddForm.cardSrc.value
   };
 
   allFetches.addNewCard(newCardData)
     .then((result) => {
       //Добавляем карточку на страницу.
-      const newElementMarkup = getElementMarkup();
-      const newElement = createCard(newElementMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
+      const newCardMarkup = getCardMarkup();
+      const newCard = createCard(newCardMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
 
-      insertNewElement(newElement, elementContainer);
+      insertNewCard(newCard, elementContainer);
 
       cardAddForm.reset();
 
@@ -154,11 +158,11 @@ function deleteConfirmFormSubmitHandler() {
 //Назначение обработчиков событий для элементов интерфейса.
 avatarEditButton.addEventListener('click', openAvatarEditPopup);
 profileEditButton.addEventListener('click', openProfileEditPopup);
-cardAddButton.addEventListener('click', openElementAddPopup);
+cardAddButton.addEventListener('click', openCardAddPopup);
 
 avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
 profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
-cardAddForm.addEventListener('submit', elementAddFormSubmitHandler);
+cardAddForm.addEventListener('submit', cardAddFormSubmitHandler);
 deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 
@@ -182,10 +186,10 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
     //Отрисовываем массив карточек по умолчанию.
     initialCardsData.forEach((cardItem) => {
-      const newElement = createCard(getElementMarkup(), cardItem.link, cardItem.name, cardItem._id,
+      const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
         cardItem.likes, currentUserId, cardItem.owner._id);
 
-      insertNewElement(newElement, elementContainer);
+      insertNewCard(newCard, elementContainer);
     });
   })
   .catch((err) => {

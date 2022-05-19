@@ -6,22 +6,24 @@ import Api from '../components/Api.js';
 let deletedCardId = '';
 const allFetches = new Api(configData);
 //Функция getElementMarkup получает шаблон элемента "карточка места" из HTML-разметки
+
+//Функция getCardMarkup получает шаблон элемента "карточка места" из HTML-разметки
 //и возвращает клон соотв. узла DOM.
-function getElementMarkup() {
-  const elementTemplate = document.querySelector('#element-template').content;
-  const cloneNode = elementTemplate.querySelector('.element').cloneNode(true);
+function getCardMarkup() {
+  const cardTemplate = document.querySelector('#card-template').content;
+  const cloneNode = cardTemplate.querySelector('.card').cloneNode(true);
 
   return cloneNode;
 }
 
-//Функция setEventListeners принимает на вход параметр elementMarkup (HTML-разметка (шаблон) нового элемента "карточка места")
+//Функция setEventListeners принимает на вход параметр cardMarkup (HTML-разметка (шаблон) нового элемента "карточка места")
 //и задает обработчики событий интерактивным элементам, присутствующим на карточке.
-function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
-  const elementImage = elementMarkup.querySelector('.element__image');
-  elementImage.src = imgSrcValue;
-  elementImage.alt = titleValue;
+function setEventListeners(cardMarkup, imgSrcValue, titleValue) {
+  const cardImage = cardMarkup.querySelector('.card__image');
+  cardImage.src = imgSrcValue;
+  cardImage.alt = titleValue;
 
-  elementImage.addEventListener('click', function () {
+  cardImage.addEventListener('click', function () {
     const imageToPreview = imagePreviewPopup.querySelector('.popup__image');
     const imageHeadingToPreview = imagePreviewPopup.querySelector('.popup__image-heading');
 
@@ -32,7 +34,7 @@ function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
     openImagePreviewPopup();
   });
 
-  elementMarkup.querySelector('.element__like-button').addEventListener('click', function (evt) {
+  cardMarkup.querySelector('.card__like-button').addEventListener('click', function (evt) {
     evt.target.classList.toggle('like-button_active');
 
     //Определяем метод запроса (что будем делать с лайками - добавлять, или удалять).
@@ -40,9 +42,10 @@ function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
 
     //Изменяем информацию о лайках на сервере.
     allFetches.changeLikesData(evt.target.closest('.element').id, queryMethod)
+
       .then((result) => {
         //Обновляем отображение значения счетчика лайков в карточке (на клиенте).
-        const likesCountElement = evt.target.closest('.element').querySelector('.element__likes-count');
+        const likesCountElement = evt.target.closest('.card').querySelector('.card__likes-count');
         likesCountElement.textContent = result.likes.length;
       })
       .catch((err) => {
@@ -50,11 +53,11 @@ function setEventListeners(elementMarkup, imgSrcValue, titleValue) {
       });
   });
 
-  const deleteButton = elementMarkup.querySelector('.element__delete-button');
+  const deleteButton = cardMarkup.querySelector('.card__delete-button');
 
   if (deleteButton) {
     deleteButton.addEventListener('click', (evt) => {
-      deletedCardId = evt.target.closest('.element').id;
+      deletedCardId = evt.target.closest('.card').id;
       openDeleteConfirmPopup();
     });
   }
@@ -69,35 +72,35 @@ function likedByCurrentUser(currentUserId, cardLikesArray) {
   });
 }
 
-//Функция createCard принимает на вход параметры elementMarkup (HTML-разметка (шаблон) нового элемента "карточка места"),
+//Функция createCard принимает на вход параметры cardMarkup (HTML-разметка (шаблон) нового элемента "карточка места"),
 //imgSrcValue (URL-адрес "карточки места"), titleValue (название "карточки места"), idValue (уникальный идентификатор
 //"карточки места") и likesCountValue (количество лайеков).
 //Выполняет создание элемента новой "карточки места", заполняя шаблон данными, и устанавливая обработчики интерактивных событий.
 //Возвращает HTML-разметку готового элемента "карточки места".
-function createCard(elementMarkup, imgSrcValue, titleValue, idValue, likesArray, currentUserId, cardOwnerId) {
-  elementMarkup.querySelector('.element__title').textContent = titleValue;
-  elementMarkup.id = idValue;
+function createCard(cardMarkup, imgSrcValue, titleValue, idValue, likesArray, currentUserId, cardOwnerId) {
+  cardMarkup.querySelector('.card__title').textContent = titleValue;
+  cardMarkup.id = idValue;
 
   //Задаем состояние кнопки лайка (лайкнул ли карточку текущий пользователь) и количество лайков в целом.
   if (likedByCurrentUser(currentUserId, likesArray)) {
-    elementMarkup.querySelector('.element__like-button').classList.add('like-button_active');
+    cardMarkup.querySelector('.card__like-button').classList.add('like-button_active');
   } else {
-    elementMarkup.querySelector('.element__like-button').classList.remove('like-button_active');
+    cardMarkup.querySelector('.card__like-button').classList.remove('like-button_active');
   };
 
-  elementMarkup.querySelector('.element__likes-count').textContent = likesArray.length;
+  cardMarkup.querySelector('.card__likes-count').textContent = likesArray.length;
 
   //Определяем наличие кнопки удаления карточки (по условию: удалять можно только свои карточки).
   if (currentUserId !== cardOwnerId) {
-    elementMarkup.querySelector('.element__delete-button').remove();
+    cardMarkup.querySelector('.card__delete-button').remove();
   }
 
   //Устанавливаем обработчики событий для активных элементов карточки.
-  setEventListeners(elementMarkup, imgSrcValue, titleValue);
+  setEventListeners(cardMarkup, imgSrcValue, titleValue);
 
-  return elementMarkup;
+  return cardMarkup;
 }
 
 
 //Экспорт функций из модуля.
-export { deletedCardId, getElementMarkup, createCard };
+export { deletedCardId, getCardMarkup, createCard };
