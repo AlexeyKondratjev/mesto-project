@@ -1,10 +1,10 @@
 //Импорт данных из других модулей.
-import { imagePreviewPopup, allFetches } from '../utils/constants.js';
+import { imagePreviewPopup, configData } from '../utils/constants.js';
 import { openImagePreviewPopup, openDeleteConfirmPopup } from './modal.js';
-
+import Api from '../components/Api.js';
 
 let deletedCardId = '';
-
+const allFetches = new Api(configData);
 //Функция getElementMarkup получает шаблон элемента "карточка места" из HTML-разметки
 //и возвращает клон соотв. узла DOM.
 function getElementMarkup() {

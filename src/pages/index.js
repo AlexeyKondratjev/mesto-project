@@ -6,15 +6,15 @@ import '../pages/index.css';
 import {
   avatarEditButton,
   profileEditButton,
-  elementAddButton,
+  cardAddButton,
   deleteConfirmPopup,
   avatarEditPopup,
   profileEditPopup,
   avatarEditForm,
   profileEditForm,
-  elementAddForm,
+  cardAddForm,
   deleteConfirmForm,
-  elementAddPopup,
+  cardAddPopup,
   elementContainer,
   avatarSrc,
   userName,
@@ -23,7 +23,7 @@ import {
   profileSubtitle,
   profileAvatar,
   validationOptions,
-  allFetches,
+  configData
 } from '../utils/constants.js'
 import { renderLoadingProcess } from '../components/utils.js';
 import { deletedCardId, getElementMarkup, createCard } from '../components/card.js';
@@ -31,13 +31,14 @@ import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openElementAddPopup, openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
+import Api from '../components/Api';
 import Section from '../components/Section.js';
 
 
 
 //Идентификатор текущего пользователя.
 let currentUserId = '';
-
+const allFetches = new Api(configData);
 
 //Функция insertNewElement принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
@@ -95,12 +96,12 @@ function profileEditFormSubmitHandler(evt) {
 function elementAddFormSubmitHandler(evt) {
   evt.preventDefault();
 
-  const previousButtonTextContent = renderLoadingProcess(true, elementAddForm, '');
+  const previousButtonTextContent = renderLoadingProcess(true, cardAddForm, '');
 
   //Сохраняем данные карточки на сервере.
   const newCardData = {
-    name: elementAddForm.elementName.value,
-    link: elementAddForm.elementSrc.value
+    name: cardAddForm.elementName.value,
+    link: cardAddForm.elementSrc.value
   };
 
   allFetches.addNewCard(newCardData)
@@ -111,21 +112,21 @@ function elementAddFormSubmitHandler(evt) {
 
       insertNewElement(newElement, elementContainer);
 
-      elementAddForm.reset();
+      cardAddForm.reset();
 
       //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
-      const inputList = Array.from(elementAddForm.querySelectorAll('.form__item'));
-      const buttonElement = elementAddForm.querySelector('.form__button');
+      const inputList = Array.from(cardAddForm.querySelectorAll('.form__item'));
+      const buttonElement = cardAddForm.querySelector('.form__button');
 
       toggleButtonState(inputList, buttonElement, { inactiveButtonClass: 'form__button_disabled' });
 
-      closePopup(elementAddPopup);
+      closePopup(cardAddPopup);
     })
     .catch((err) => {
       console.log(err);
     })
     .finally(() => {
-      renderLoadingProcess(false, elementAddForm, previousButtonTextContent);
+      renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
     });
 }
 
@@ -153,11 +154,11 @@ function deleteConfirmFormSubmitHandler() {
 //Назначение обработчиков событий для элементов интерфейса.
 avatarEditButton.addEventListener('click', openAvatarEditPopup);
 profileEditButton.addEventListener('click', openProfileEditPopup);
-elementAddButton.addEventListener('click', openElementAddPopup);
+cardAddButton.addEventListener('click', openElementAddPopup);
 
 avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
 profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
-elementAddForm.addEventListener('submit', elementAddFormSubmitHandler);
+cardAddForm.addEventListener('submit', elementAddFormSubmitHandler);
 deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 

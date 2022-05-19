@@ -1,10 +1,7 @@
 export default class Api {
-    constructor() {
-        this._baseUrl = 'https://nomoreparties.co/v1/plus-cohort-9',
-        this._headers = {
-            authorization: '15079f84-7c32-450a-9816-73a1a409c0ce',
-            'Content-Type': 'application/json'
-        }
+    constructor({ baseUrl, headers }) {
+        this._baseUrl = baseUrl,
+        this._headers = headers
     }
     _checkResponse(res) {
         if (res.ok) {

@@ -1,6 +1,6 @@
 //Импорт данных из других модулей.
 import {
-  avatarEditPopup, profileEditPopup, elementAddPopup, elementAddForm, imagePreviewPopup, elementContainer, avatarSrc,
+  avatarEditPopup, profileEditPopup, cardAddPopup, elementAddForm, imagePreviewPopup, elementContainer, avatarSrc,
   userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, deleteConfirmPopup, popups
 } from '../utils/constants.js';
 import { toggleButtonState } from './validate.js';
@@ -47,7 +47,7 @@ function openProfileEditPopup() {
 
 //Функция открывает попап добавления карточки нового "места".
 function openElementAddPopup() {
-  openPopup(elementAddPopup);
+  openPopup(cardAddPopup);
 }
 
 //Функция открывает попап просмотра изображения "места".
