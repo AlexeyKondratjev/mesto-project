@@ -1,10 +1,11 @@
 //Импорт данных из других модулей.
-import { imagePreviewPopup } from '../utils/constants.js';
+import { imagePreviewPopup, configData } from '../utils/constants.js';
 import { openImagePreviewPopup, openDeleteConfirmPopup } from './modal.js';
-import { removeCard, changeLikesData } from './api.js';
-
+import Api from '../components/Api.js';
 
 let deletedCardId = '';
+const allFetches = new Api(configData);
+//Функция getElementMarkup получает шаблон элемента "карточка места" из HTML-разметки
 
 //Функция getCardMarkup получает шаблон элемента "карточка места" из HTML-разметки
 //и возвращает клон соотв. узла DOM.
@@ -40,7 +41,8 @@ function setEventListeners(cardMarkup, imgSrcValue, titleValue) {
     const queryMethod = evt.target.classList.contains('like-button_active') ? 'PUT' : 'DELETE';
 
     //Изменяем информацию о лайках на сервере.
-    changeLikesData(evt.target.closest('.card').id, queryMethod)
+    allFetches.changeLikesData(evt.target.closest('.element').id, queryMethod)
+
       .then((result) => {
         //Обновляем отображение значения счетчика лайков в карточке (на клиенте).
         const likesCountElement = evt.target.closest('.card').querySelector('.card__likes-count');

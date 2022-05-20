@@ -1,4 +1,3 @@
-import Api from '../components/Api copy.js'
 export const avatarEditButton = document.querySelector('.profile__avatar-edit-button');
 export const profileEditButton = document.querySelector('.profile__edit-button');
 export const cardAddButton = document.querySelector('.profile__add-button');
@@ -27,7 +26,7 @@ export const userName = profileEditForm.userName;
 export const aboutYourself = profileEditForm.aboutYourself;
 export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');
-export const profileAvatar = document.querySelector('.profile__avatar');
+export const profileAvatar = document.querySelector('.profile__avatar')
 
 export const validationOptions = {
   formSelector: '.popup__form',
@@ -37,4 +36,11 @@ export const validationOptions = {
   inputErrorClass: 'form__item_type_error',
   errorClass: 'form__error_visible'
 };
-export const allFetches = new Api();
+
+export const configData = {
+  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-9',
+  headers: {
+    authorization: '15079f84-7c32-450a-9816-73a1a409c0ce',
+    'Content-Type': 'application/json'
+  }
+}

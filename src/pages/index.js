@@ -10,7 +10,6 @@ import {
   deleteConfirmPopup,
   avatarEditPopup,
   profileEditPopup,
-  profileEditPopupCloseButton,
   avatarEditForm,
   profileEditForm,
   cardAddForm,
@@ -28,7 +27,7 @@ import {
   profileSubtitle,
   profileAvatar,
   validationOptions,
-  allFetches,
+  configData
 } from '../utils/constants.js'
 import { renderLoadingProcess } from '../components/utils.js';
 import { deletedCardId, getCardMarkup, createCard } from '../components/card.js';
@@ -36,12 +35,14 @@ import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openCardAddPopup, openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
+import Api from '../components/Api';
+import Section from '../components/Section.js';
 
 
 
 //Идентификатор текущего пользователя.
 let currentUserId = '';
-
+const allFetches = new Api(configData);
 
 //Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
@@ -171,8 +172,13 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
   .then((result) => {
     const profileData = result[0];
     const initialCardsData = result[1];
-
-    //Отрисовываем данные профиля текущего пользователя.
+    // const cardList = new Section({
+    //   items: initialCardsData,
+    //   renderer: (item) => {
+    //     const card = item.isOwner
+    //   },
+    // }, 'elements' );
+    //Отрисовываем данных профиля текущего пользователя.
     profileTitle.textContent = profileData.name;
     profileSubtitle.textContent = profileData.about;
     profileAvatar.src = profileData.avatar;
