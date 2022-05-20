@@ -30,7 +30,7 @@ export const profileSubtitle = document.querySelector('.profile__subtitle');
 export const profileAvatar = document.querySelector('.profile__avatar');
 
 export const validationOptions = {
-  formSelector: '.popup__form',
+  //formSelector: '.popup__form',
   inputSelector: '.form__item',
   submitButtonSelector: '.form__button',
   inactiveButtonClass: 'form__button_disabled',

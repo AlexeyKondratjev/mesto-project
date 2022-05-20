@@ -36,12 +36,17 @@ import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openCardAddPopup, openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
+import FormValidator from '../components/FormValidator.js';
+import UserInfo from '../components/UserInfo.js';
 
+/////////// TEMP CODE >>>>>>>>>//////////////////////////////////////
+import Card from '../components/CardClass.js';
+/////////// TEMP CODE <<<<<<<<<//////////////////////////////////////
 
 
 //Идентификатор текущего пользователя.
 let currentUserId = '';
-
+const userInfo = new UserInfo({userNameSelector: '#userName-input', aboutUserSelector: '#aboutYourself-input'});
 
 //Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
@@ -81,6 +86,7 @@ function profileEditFormSubmitHandler(evt) {
     about: aboutYourself.value
   };
 
+  ///////// ---> setUserInfo() ?? ///////////////////
   allFetches.editProfileData(editedProfileData)
     .then((result) => {
       profileTitle.textContent = result.name;
@@ -168,23 +174,39 @@ deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 //Подгрузка и отображение на странице данных профиля текущего пользователя и массива карточек по умолчанию.
 Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
-  .then((result) => {
-    const profileData = result[0];
-    const initialCardsData = result[1];
-
+  .then(([profileData, initialCardsData]) => {
     //Отрисовываем данные профиля текущего пользователя.
-    profileTitle.textContent = profileData.name;
-    profileSubtitle.textContent = profileData.about;
-    profileAvatar.src = profileData.avatar;
-    currentUserId = profileData._id;
+    /////////// TEMP CODE >>>>>>////////////////////
+    //---> getUserInfo() ???
+          /*  profileTitle.textContent = profileData.name;
+              profileSubtitle.textContent = profileData.about;
+              profileAvatar.src = profileData.avatar;
+              currentUserId = profileData._id; */
+    const userInfo = new UserInfo();
+    /////////
 
     //Отрисовываем массив карточек по умолчанию.
-    initialCardsData.forEach((cardItem) => {
-      const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
-        cardItem.likes, currentUserId, cardItem.owner._id);
+    /*     initialCardsData.forEach((cardItem) => {
+          const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
+            cardItem.likes, currentUserId, cardItem.owner._id);
 
-      insertNewCard(newCard, elementContainer);
+          insertNewCard(newCard, elementContainer);
+        }); */
+
+    initialCardsData.forEach((cardItem) => {
+      const cardData = {
+        title: cardItem.name,
+        imageSrc: cardItem.link,
+        id: cardItem._id,
+        likesArray: cardItem.likes,
+        cardOwnerId: cardItem.owner._id
+      };
+      const card = new Card(cardData, '#card-template');
+      const cardElement = card.generateCard(currentUserId);
+
+      insertNewCard(cardElement, elementContainer);
     });
+    /////////// TEMP CODE <<<<<<////////////////////
   })
   .catch((err) => {
     console.log(err);
@@ -193,4 +215,50 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 
 //Активация валидации форм.
-enableValidation(validationOptions);
+/////////// TEMP CODE >>>>>>////////////////////
+  //-- enableValidation(validationOptions);
+const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
+const profileEditFormValidator = new FormValidator(validationOptions, profileEditForm);
+const cardAddFormValidator = new FormValidator(validationOptions, cardAddForm);
+
+avatarEditFormValidator.enableValidation();
+profileEditFormValidator.enableValidation();
+cardAddFormValidator.enableValidation();
+/////////// TEMP CODE <<<<<<////////////////////
+
+//-------------------------------------------//
+Promise.all([
+  api.getUser(),
+  api.getCards()
+])
+.then(([user, cards]) => {
+  const cardList = new Section({
+    data: cards,
+    renderer: (cardDetail) => {
+      const card = new Card({
+        data: cardDetail,
+        userId: user._id,
+        rendererLike: (cardId) => {
+          api.putLike(cardId)
+          .then(data => card.renderLike({ countOfLikes: data.likes.length, liked: true }))
+          .catch(err => console.log(err))
+        },
+        rendererUnlike: (cardId) => {
+          api.deleteLike(cardId)
+          .then(data => card.renderLike({ countOfLikes: data.likes.length, liked: false }))
+          .catch(err => console.log(err))
+        }
+      }, CARD_CONFIG);
+
+      const cardElement = card.generate();
+
+      cardList.addItem(cardElement);
+
+    }
+  }, '.gallery');
+
+  cardList.renderItems();
+
+})
+.catch(err => console.log(err))
+//-------------------------------------------//
