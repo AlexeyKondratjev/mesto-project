@@ -1,15 +1,23 @@
+import { closePopupByEscapeKey } from "./modal";
 export default class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
   };
+  _closePopupByEscapeKey(evt) {
+    if (evt.key === 'Escape') {
+      const popupOpened = document.querySelector('.popup_opened');
+      close(popupOpened);
+    }
+  }
   open() {
-    document.addEventListener('keydown', closePopupByEscapeKey);
+    debugger;
+    //document.querySelector('.page').addEventListener('keydown', closePopupByEscapeKey);
     this._popup.classList.add('popup_opened');
     //look at func openPopup
   };
   close() {
     this._popup.classList.remove('popup_opened');
-    document.removeEventListener('keydown', closePopupByEscapeKey);
+    //document.querySelector('.page').removeEventListener('keydown', closePopupByEscapeKey);
     //look at closePopup
   };
   _handleEscClose(evt) {
@@ -20,14 +28,14 @@ export default class Popup {
     }
   }
   setEventListeners() {
-// добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
-//принесла от себя, перепиши
-popup.addEventListener('mousedown', (evt) => {
-  if (evt.target.classList.contains('popup_opened')) {
-      closePopup(popup)
+    // добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
+    this._popup.addEventListener('mousedown', (evt) => {
+      if (evt.target.classList.contains('popup_opened')) {
+          close(this._popup)
+      }
+      if (evt.target.classList.contains('.popup__toggle')) {
+        close(this._popup)
+      }
+    })
   }
-  if (evt.target.classList.contains('popup__button-close')) {
-    closePopup(popup)
-  }
-  })}
 }
