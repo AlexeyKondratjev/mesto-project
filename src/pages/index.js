@@ -46,7 +46,6 @@ import Card from '../components/CardClass.js';
 
 //Идентификатор текущего пользователя.
 let currentUserId = '';
-const userInfo = new UserInfo({userNameSelector: '#userName-input', aboutUserSelector: '#aboutYourself-input'});
 
 //Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
@@ -176,16 +175,13 @@ deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
   .then(([profileData, initialCardsData]) => {
     //Отрисовываем данные профиля текущего пользователя.
-    /////////// TEMP CODE >>>>>>////////////////////
-    //---> getUserInfo() ???
-          /*  profileTitle.textContent = profileData.name;
-              profileSubtitle.textContent = profileData.about;
-              profileAvatar.src = profileData.avatar;
-              currentUserId = profileData._id; */
-    const userInfo = new UserInfo();
-    /////////
+    profileTitle.textContent = profileData.name;
+    profileSubtitle.textContent = profileData.about;
+    profileAvatar.src = profileData.avatar;
+    currentUserId = profileData._id;
 
     //Отрисовываем массив карточек по умолчанию.
+    /////////// TEMP CODE >>>>>>////////////////////
     /*     initialCardsData.forEach((cardItem) => {
           const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
             cardItem.likes, currentUserId, cardItem.owner._id);
@@ -216,7 +212,7 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 //Активация валидации форм.
 /////////// TEMP CODE >>>>>>////////////////////
-  //-- enableValidation(validationOptions);
+//-- enableValidation(validationOptions);
 const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
 const profileEditFormValidator = new FormValidator(validationOptions, profileEditForm);
 const cardAddFormValidator = new FormValidator(validationOptions, cardAddForm);
@@ -225,40 +221,3 @@ avatarEditFormValidator.enableValidation();
 profileEditFormValidator.enableValidation();
 cardAddFormValidator.enableValidation();
 /////////// TEMP CODE <<<<<<////////////////////
-
-//-------------------------------------------//
-Promise.all([
-  api.getUser(),
-  api.getCards()
-])
-.then(([user, cards]) => {
-  const cardList = new Section({
-    data: cards,
-    renderer: (cardDetail) => {
-      const card = new Card({
-        data: cardDetail,
-        userId: user._id,
-        rendererLike: (cardId) => {
-          api.putLike(cardId)
-          .then(data => card.renderLike({ countOfLikes: data.likes.length, liked: true }))
-          .catch(err => console.log(err))
-        },
-        rendererUnlike: (cardId) => {
-          api.deleteLike(cardId)
-          .then(data => card.renderLike({ countOfLikes: data.likes.length, liked: false }))
-          .catch(err => console.log(err))
-        }
-      }, CARD_CONFIG);
-
-      const cardElement = card.generate();
-
-      cardList.addItem(cardElement);
-
-    }
-  }, '.gallery');
-
-  cardList.renderItems();
-
-})
-.catch(err => console.log(err))
-//-------------------------------------------//
