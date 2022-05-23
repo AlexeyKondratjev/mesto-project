@@ -31,21 +31,43 @@ import {
 } from '../utils/constants.js'
 import { renderLoadingProcess } from '../components/utils.js';
 import {
-  openAvatarEditPopup, openProfileEditPopup, closePopup, openCardAddPopup, openImagePreviewPopup
+  openAvatarEditPopup,
+  openProfileEditPopup,
+  closePopup,
+  openCardAddPopup,
+  openImagePreviewPopup
 } from '../components/modal.js';
+//import { toggleButtonState, enableValidation } from '../components/validate.js';
 //import { deletedCardId, getCardMarkup, createCard } from '../components/__card.js';
-//import { toggleButtonState, enableValidation } from '../components/__validate.js';
 
 import FormValidator from '../components/FormValidator.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
 import Section from '../components/Section.js';
 import Card from '../components/Card.js';
+import PopupWithForm from '../components/PopupWithForm.js';
 
 
 //Идентификатор текущего пользователя.
 //let currentUserId = ''; currentUserId теперь в userInfo -> userInfo.getUserInfo().userId;
 const allFetches = new Api(configData);
+const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',(evt) => {
+  evt.preventDefault();
+  const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
+  //Сохраняем отредактированные данные на сервере.
+  allFetches.editAvatarData({ avatar: avatarSrc.value })
+    .then((result) => {
+      profileAvatar.src = result.avatar;
+      avaEditPopup.close();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
+    });
+});
+avaEditPopup.setEventListeners();
 const userInfo = new UserInfo({ userNameSelector: '.profile__title', aboutUserSelector: '.profile__subtitle',
   userAvatarSelector: '.profile__avatar' });
 
@@ -58,24 +80,24 @@ function insertNewCard(card, container) {
 }
 
 //Функция-обработчик события "submit" формы редактирования данных аватара профиля пользователя.
-function avatarEditFormSubmitHandler(evt) {
-  evt.preventDefault();
+// function avatarEditFormSubmitHandler(evt) {
+//   evt.preventDefault();
 
-  const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
+//   const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
 
-  //Сохраняем отредактированные данные на сервере.
-  allFetches.editAvatarData({ avatar: avatarSrc.value })
-    .then((result) => {
-      profileAvatar.src = result.avatar;
-      closePopup(avatarEditPopup);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
-    });
-}
+//   //Сохраняем отредактированные данные на сервере.
+//   allFetches.editAvatarData({ avatar: avatarSrc.value })
+//     .then((result) => {
+//       profileAvatar.src = result.avatar;
+//       closePopup(avatarEditPopup);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+//     .finally(() => {
+//       renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
+//     });
+// }
 
 //Функция-обработчик события "submit" формы редактирования данных профиля пользователя.
 function profileEditFormSubmitHandler(evt) {
@@ -124,7 +146,8 @@ function cardAddFormSubmitHandler(evt) {
 
       insertNewCard(newCard, elementContainer);
 
-      cardAddForm.reset();
+      //cardAddForm.reset();
+      avaEditPopup.close();
 
       //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
       const inputList = Array.from(cardAddForm.querySelectorAll('.form__item'));
@@ -164,11 +187,11 @@ function deleteConfirmFormSubmitHandler() {
 
 
 //Назначение обработчиков событий для элементов интерфейса.
-avatarEditButton.addEventListener('click', openAvatarEditPopup);
+avatarEditButton.addEventListener('click', avaEditPopup.open.bind(avaEditPopup));
 profileEditButton.addEventListener('click', openProfileEditPopup);
 cardAddButton.addEventListener('click', openCardAddPopup);
 
-avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
+//avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
 profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
 cardAddForm.addEventListener('submit', cardAddFormSubmitHandler);
 deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
@@ -218,6 +241,7 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 
 //Активация валидации форм.
+//enableValidation(validationOptions);
 const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
 const profileEditFormValidator = new FormValidator(validationOptions, profileEditForm);
 const cardAddFormValidator = new FormValidator(validationOptions, cardAddForm);

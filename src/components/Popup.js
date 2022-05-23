@@ -1,40 +1,48 @@
-import { closePopupByEscapeKey } from "./modal";
 export default class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
-  };
-  _closePopupByEscapeKey(evt) {
-    if (evt.key === 'Escape') {
-      const popupOpened = document.querySelector('.popup_opened');
-      close(popupOpened);
-    }
   }
   open() {
-    debugger;
-    //document.querySelector('.page').addEventListener('keydown', closePopupByEscapeKey);
+    alert('in open')
+    const context = this;
+    this._handleEscClose();
     this._popup.classList.add('popup_opened');
     //look at func openPopup
   };
   close() {
+    alert('in close')
+    const context = this;
+    this._handleEscClose();
     this._popup.classList.remove('popup_opened');
-    //document.querySelector('.page').removeEventListener('keydown', closePopupByEscapeKey);
-    //look at closePopup
+    //look at func closePopup
   };
-  _handleEscClose(evt) {
+  _handleEscClose() {
     // Содержит логику закрытия попапа клавишей Esc.
-    if (evt.key === 'Escape') {
-      const popupOpened = document.querySelector('.popup_opened');
-      this.close(this._popup);
+    const that = this;
+    function closePopupByEscapeKey(evt) {
+      console.log(evt);
+      if (evt.key === 'Escape') {
+        that.close();
+      }
+    }
+    if(!this._popup.classList.contains('popup_opened')) {
+      //alert('in add');
+      document.addEventListener('keydown', closePopupByEscapeKey);
+    }
+    else {
+      //alert('in remove');
+      document.removeEventListener('keydown', closePopupByEscapeKey);
+
     }
   }
   setEventListeners() {
     // добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
     this._popup.addEventListener('mousedown', (evt) => {
       if (evt.target.classList.contains('popup_opened')) {
-          close(this._popup)
+        this.close()
       }
-      if (evt.target.classList.contains('.popup__toggle')) {
-        close(this._popup)
+      if (evt.target.classList.contains('popup__toggle')) {
+        this.close()
       }
     })
   }

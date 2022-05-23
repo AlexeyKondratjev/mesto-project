@@ -2,9 +2,15 @@
 import { imagePreviewPopup, configData } from '../utils/constants.js';
 import { openImagePreviewPopup, openDeleteConfirmPopup } from './modal.js';
 import Api from './Api.js';
+<<<<<<< HEAD:src/components/card.js
+import PopupWithImage from './PopupWithImage.js';
+=======
+>>>>>>> 2adefd64224b4866ab8cace4daa4c9667adb86b4:src/components/__card.js
 
 let deletedCardId = '';
 const allFetches = new Api(configData);
+const prewiewPopup = new PopupWithImage('.popup_type_imagePreview');
+prewiewPopup.setEventListeners();
 //Функция getElementMarkup получает шаблон элемента "карточка места" из HTML-разметки
 
 //Функция getCardMarkup получает шаблон элемента "карточка места" из HTML-разметки
@@ -12,7 +18,6 @@ const allFetches = new Api(configData);
 function getCardMarkup() {
   const cardTemplate = document.querySelector('#card-template').content;
   const cloneNode = cardTemplate.querySelector('.card').cloneNode(true);
-
   return cloneNode;
 }
 
@@ -24,14 +29,7 @@ function setEventListeners(cardMarkup, imgSrcValue, titleValue) {
   cardImage.alt = titleValue;
 
   cardImage.addEventListener('click', function () {
-    const imageToPreview = imagePreviewPopup.querySelector('.popup__image');
-    const imageHeadingToPreview = imagePreviewPopup.querySelector('.popup__image-heading');
-
-    imageToPreview.src = imgSrcValue;
-    imageToPreview.alt = titleValue;
-    imageHeadingToPreview.textContent = titleValue;
-
-    openImagePreviewPopup();
+    prewiewPopup.open(imgSrcValue, titleValue);
   });
 
   cardMarkup.querySelector('.card__like-button').addEventListener('click', function (evt) {
@@ -41,7 +39,7 @@ function setEventListeners(cardMarkup, imgSrcValue, titleValue) {
     const queryMethod = evt.target.classList.contains('like-button_active') ? 'PUT' : 'DELETE';
 
     //Изменяем информацию о лайках на сервере.
-    allFetches.changeLikesData(evt.target.closest('.element').id, queryMethod)
+    allFetches.changeLikesData(evt.target.closest('.card').id, queryMethod)
 
       .then((result) => {
         //Обновляем отображение значения счетчика лайков в карточке (на клиенте).
