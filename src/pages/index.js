@@ -30,24 +30,26 @@ import {
   configData
 } from '../utils/constants.js'
 import { renderLoadingProcess } from '../components/utils.js';
-import { deletedCardId, getCardMarkup, createCard } from '../components/card.js';
 import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openCardAddPopup, openImagePreviewPopup
 } from '../components/modal.js';
-import { toggleButtonState, enableValidation } from '../components/validate.js';
+//import { deletedCardId, getCardMarkup, createCard } from '../components/__card.js';
+//import { toggleButtonState, enableValidation } from '../components/__validate.js';
+
 import FormValidator from '../components/FormValidator.js';
 import UserInfo from '../components/UserInfo.js';
-import Api from '../components/Api';
+import Api from '../components/Api.js';
 import Section from '../components/Section.js';
-
-/////////// TEMP CODE >>>>>>>>>//////////////////////////////////////
-import Card from '../components/CardClass.js';
-/////////// TEMP CODE <<<<<<<<<//////////////////////////////////////
+import Card from '../components/Card.js';
 
 
 //Идентификатор текущего пользователя.
-let currentUserId = '';
+//let currentUserId = ''; currentUserId теперь в userInfo -> userInfo.getUserInfo().userId;
 const allFetches = new Api(configData);
+const userInfo = new UserInfo({ userNameSelector: '.profile__title', aboutUserSelector: '.profile__subtitle',
+  userAvatarSelector: '.profile__avatar' });
+
+
 
 //Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
@@ -177,19 +179,15 @@ deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
   .then(([profileData, initialCardsData]) => {
     //Отрисовываем данные профиля текущего пользователя.
+    userInfo.setUserInfo(profileData);
+
+    //Отрисовываем массив карточек по умолчанию.
     // const cardList = new Section({
     //   items: initialCardsData,
     //   renderer: (item) => {
     //     const card = item.isOwner
     //   },
     // }, 'elements' );
-    //Отрисовываем данных профиля текущего пользователя.
-    profileTitle.textContent = profileData.name;
-    profileSubtitle.textContent = profileData.about;
-    profileAvatar.src = profileData.avatar;
-    currentUserId = profileData._id;
-
-    //Отрисовываем массив карточек по умолчанию.
     /////////// TEMP CODE >>>>>>////////////////////
     /*     initialCardsData.forEach((cardItem) => {
           const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
@@ -207,7 +205,7 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
         cardOwnerId: cardItem.owner._id
       };
       const card = new Card(cardData, '#card-template');
-      const cardElement = card.generateCard(currentUserId);
+      const cardElement = card.generateCard(userInfo.getUserInfo().userId);
 
       insertNewCard(cardElement, elementContainer);
     });
@@ -220,8 +218,6 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 
 //Активация валидации форм.
-/////////// TEMP CODE >>>>>>////////////////////
-//-- enableValidation(validationOptions);
 const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
 const profileEditFormValidator = new FormValidator(validationOptions, profileEditForm);
 const cardAddFormValidator = new FormValidator(validationOptions, cardAddForm);
@@ -229,4 +225,3 @@ const cardAddFormValidator = new FormValidator(validationOptions, cardAddForm);
 avatarEditFormValidator.enableValidation();
 profileEditFormValidator.enableValidation();
 cardAddFormValidator.enableValidation();
-/////////// TEMP CODE <<<<<<////////////////////
