@@ -5,8 +5,6 @@ import {
 } from '../utils/constants.js';
 import { renderLoadingProcess } from './utils.js';
 import { toggleButtonState } from './validate.js';
-import PopupWithForm from './PopupWithForm.js';
-import { allFetches } from '../pages/index.js';
 
 
 

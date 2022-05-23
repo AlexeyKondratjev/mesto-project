@@ -2,7 +2,10 @@
 import { imagePreviewPopup, configData } from '../utils/constants.js';
 import { openImagePreviewPopup, openDeleteConfirmPopup } from './modal.js';
 import Api from './Api.js';
+<<<<<<< HEAD:src/components/card.js
 import PopupWithImage from './PopupWithImage.js';
+=======
+>>>>>>> 2adefd64224b4866ab8cace4daa4c9667adb86b4:src/components/__card.js
 
 let deletedCardId = '';
 const allFetches = new Api(configData);

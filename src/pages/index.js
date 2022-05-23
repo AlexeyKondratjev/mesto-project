@@ -30,7 +30,6 @@ import {
   configData
 } from '../utils/constants.js'
 import { renderLoadingProcess } from '../components/utils.js';
-import { deletedCardId, getCardMarkup, createCard } from '../components/card.js';
 import {
   openAvatarEditPopup,
   openProfileEditPopup,
@@ -39,14 +38,22 @@ import {
   openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
+//import { deletedCardId, getCardMarkup, createCard } from '../components/__card.js';
 import Api from '../components/Api';
 import Section from '../components/Section.js';
 import PopupWithForm from '../components/PopupWithForm.js';
 
 
 
+import FormValidator from '../components/FormValidator.js';
+import UserInfo from '../components/UserInfo.js';
+import Api from '../components/Api.js';
+import Section from '../components/Section.js';
+import Card from '../components/Card.js';
+
+
 //Идентификатор текущего пользователя.
-let currentUserId = '';
+//let currentUserId = ''; currentUserId теперь в userInfo -> userInfo.getUserInfo().userId;
 const allFetches = new Api(configData);
 const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',(evt) => {
   evt.preventDefault();
@@ -65,6 +72,10 @@ const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',(evt) => {
     });
 });
 avaEditPopup.setEventListeners();
+const userInfo = new UserInfo({ userNameSelector: '.profile__title', aboutUserSelector: '.profile__subtitle',
+  userAvatarSelector: '.profile__avatar' });
+
+
 
 //Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
@@ -104,6 +115,7 @@ function profileEditFormSubmitHandler(evt) {
     about: aboutYourself.value
   };
 
+  ///////// ---> setUserInfo() ?? ///////////////////
   allFetches.editProfileData(editedProfileData)
     .then((result) => {
       profileTitle.textContent = result.name;
@@ -192,28 +204,39 @@ deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 //Подгрузка и отображение на странице данных профиля текущего пользователя и массива карточек по умолчанию.
 Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
-  .then((result) => {
-    const profileData = result[0];
-    const initialCardsData = result[1];
+  .then(([profileData, initialCardsData]) => {
+    //Отрисовываем данные профиля текущего пользователя.
+    userInfo.setUserInfo(profileData);
+
+    //Отрисовываем массив карточек по умолчанию.
     // const cardList = new Section({
     //   items: initialCardsData,
     //   renderer: (item) => {
     //     const card = item.isOwner
     //   },
     // }, 'elements' );
-    //Отрисовываем данных профиля текущего пользователя.
-    profileTitle.textContent = profileData.name;
-    profileSubtitle.textContent = profileData.about;
-    profileAvatar.src = profileData.avatar;
-    currentUserId = profileData._id;
+    /////////// TEMP CODE >>>>>>////////////////////
+    /*     initialCardsData.forEach((cardItem) => {
+          const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
+            cardItem.likes, currentUserId, cardItem.owner._id);
 
-    //Отрисовываем массив карточек по умолчанию.
+          insertNewCard(newCard, elementContainer);
+        }); */
+
     initialCardsData.forEach((cardItem) => {
-      const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
-        cardItem.likes, currentUserId, cardItem.owner._id);
+      const cardData = {
+        title: cardItem.name,
+        imageSrc: cardItem.link,
+        id: cardItem._id,
+        likesArray: cardItem.likes,
+        cardOwnerId: cardItem.owner._id
+      };
+      const card = new Card(cardData, '#card-template');
+      const cardElement = card.generateCard(userInfo.getUserInfo().userId);
 
-      insertNewCard(newCard, elementContainer);
+      insertNewCard(cardElement, elementContainer);
     });
+    /////////// TEMP CODE <<<<<<////////////////////
   })
   .catch((err) => {
     console.log(err);
@@ -223,4 +246,10 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 //Активация валидации форм.
 enableValidation(validationOptions);
-export {allFetches};
+const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
+const profileEditFormValidator = new FormValidator(validationOptions, profileEditForm);
+const cardAddFormValidator = new FormValidator(validationOptions, cardAddForm);
+
+avatarEditFormValidator.enableValidation();
+profileEditFormValidator.enableValidation();
+cardAddFormValidator.enableValidation();
