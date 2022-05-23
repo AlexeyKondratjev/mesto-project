@@ -32,17 +32,39 @@ import {
 import { renderLoadingProcess } from '../components/utils.js';
 import { deletedCardId, getCardMarkup, createCard } from '../components/card.js';
 import {
-  openAvatarEditPopup, openProfileEditPopup, closePopup, openCardAddPopup, openImagePreviewPopup
+  openAvatarEditPopup,
+  openProfileEditPopup,
+  closePopup,
+  openCardAddPopup,
+  openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
 import Api from '../components/Api';
 import Section from '../components/Section.js';
+import PopupWithForm from '../components/PopupWithForm.js';
 
 
 
 //Идентификатор текущего пользователя.
 let currentUserId = '';
 const allFetches = new Api(configData);
+const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',(evt) => {
+  evt.preventDefault();
+  const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
+  //Сохраняем отредактированные данные на сервере.
+  allFetches.editAvatarData({ avatar: avatarSrc.value })
+    .then((result) => {
+      profileAvatar.src = result.avatar;
+      avaEditPopup.close();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
+    });
+});
+avaEditPopup.setEventListeners();
 
 //Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
 //и container (узел DOM). Выполняет вставку card в container.
@@ -51,24 +73,24 @@ function insertNewCard(card, container) {
 }
 
 //Функция-обработчик события "submit" формы редактирования данных аватара профиля пользователя.
-function avatarEditFormSubmitHandler(evt) {
-  evt.preventDefault();
+// function avatarEditFormSubmitHandler(evt) {
+//   evt.preventDefault();
 
-  const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
+//   const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
 
-  //Сохраняем отредактированные данные на сервере.
-  allFetches.editAvatarData({ avatar: avatarSrc.value })
-    .then((result) => {
-      profileAvatar.src = result.avatar;
-      closePopup(avatarEditPopup);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
-    });
-}
+//   //Сохраняем отредактированные данные на сервере.
+//   allFetches.editAvatarData({ avatar: avatarSrc.value })
+//     .then((result) => {
+//       profileAvatar.src = result.avatar;
+//       closePopup(avatarEditPopup);
+//     })
+//     .catch((err) => {
+//       console.log(err);
+//     })
+//     .finally(() => {
+//       renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
+//     });
+// }
 
 //Функция-обработчик события "submit" формы редактирования данных профиля пользователя.
 function profileEditFormSubmitHandler(evt) {
@@ -116,7 +138,8 @@ function cardAddFormSubmitHandler(evt) {
 
       insertNewCard(newCard, elementContainer);
 
-      cardAddForm.reset();
+      //cardAddForm.reset();
+      avaEditPopup.close();
 
       //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
       const inputList = Array.from(cardAddForm.querySelectorAll('.form__item'));
@@ -156,11 +179,11 @@ function deleteConfirmFormSubmitHandler() {
 
 
 //Назначение обработчиков событий для элементов интерфейса.
-avatarEditButton.addEventListener('click', openAvatarEditPopup);
+avatarEditButton.addEventListener('click', avaEditPopup.open.bind(avaEditPopup));
 profileEditButton.addEventListener('click', openProfileEditPopup);
 cardAddButton.addEventListener('click', openCardAddPopup);
 
-avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
+//avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
 profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
 cardAddForm.addEventListener('submit', cardAddFormSubmitHandler);
 deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
@@ -200,3 +223,4 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 //Активация валидации форм.
 enableValidation(validationOptions);
+export {allFetches};

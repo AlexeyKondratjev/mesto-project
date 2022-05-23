@@ -2,7 +2,6 @@ import Popup from "./Popup";
 import {imagePreviewPopup} from '../utils/constants.js';
 
 export default class PopupWithImage extends Popup {
-  debugger;
   constructor(popupSelector) {
     super(popupSelector);
   }
