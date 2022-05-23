@@ -52,18 +52,18 @@
       </div>
     </section>
 
-    <section class="popup popup_type_cardAdd">
-      <div class="popup__container popup__container_type_cardAdd">
+    <section class="popup popup_type_elementAdd">
+      <div class="popup__container popup__container_type_elementAdd">
         <div class="popup__toggle"></div>
         <h2 class="popup__heading">Новое место</h2>
-        <form name="cardAddForm" class="popup__form form" novalidate>
+        <form name="elementAddForm" class="popup__form form" novalidate>
           <fieldset class="form__input-container">
-            <input id="cardName-input" type="text" name="cardName" placeholder="Название" class="form__item"
+            <input id="elementName-input" type="text" name="elementName" placeholder="Название" class="form__item"
               required minlength="2" maxlength="30">
-            <span class="cardName-input-error form__error"></span>
-            <input id="cardSrc-input" type="url" name="cardSrc" placeholder="Ссылка на картинку"
+            <span class="elementName-input-error form__error"></span>
+            <input id="elementSrc-input" type="url" name="elementSrc" placeholder="Ссылка на картинку"
               class="form__item" required>
-            <span class="cardSrc-input-error form__error"></span>
+            <span class="elementSrc-input-error form__error"></span>
           </fieldset>
           <button type="submit" class="form__button">Создать</button>
         </form>
@@ -111,16 +111,16 @@
 
   </div>
 
-  <template id="card-template">
-    <article class="card">
-      <img src="" alt="" class="card__image">
-      <div class="card__footer">
-        <p class="card__title page__nowrap-title"></p>
-        <div class="card__like-panel">
-          <button type="button" class="card__like-button like-button"></button>
-          <p class="card__likes-count"></p>
+  <template id="element-template">
+    <article class="element">
+      <img src="" alt="" class="element__image">
+      <div class="element__footer">
+        <p class="element__title page__nowrap-title"></p>
+        <div class="element__like-panel">
+          <button type="button" class="element__like-button like-button"></button>
+          <p class="element__likes-count"></p>
         </div>
-        <button type="button" class="card__delete-button delete-button"></button>
+        <button type="button" class="element__delete-button delete-button"></button>
       </div>
     </article>
   </template>
