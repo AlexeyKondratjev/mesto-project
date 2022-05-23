@@ -37,19 +37,15 @@ import {
   openCardAddPopup,
   openImagePreviewPopup
 } from '../components/modal.js';
-import { toggleButtonState, enableValidation } from '../components/validate.js';
+//import { toggleButtonState, enableValidation } from '../components/validate.js';
 //import { deletedCardId, getCardMarkup, createCard } from '../components/__card.js';
-import Api from '../components/Api';
-import Section from '../components/Section.js';
-import PopupWithForm from '../components/PopupWithForm.js';
-
-
 
 import FormValidator from '../components/FormValidator.js';
 import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api.js';
 import Section from '../components/Section.js';
 import Card from '../components/Card.js';
+import PopupWithForm from '../components/PopupWithForm.js';
 
 
 //Идентификатор текущего пользователя.
@@ -245,7 +241,7 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 
 //Активация валидации форм.
-enableValidation(validationOptions);
+//enableValidation(validationOptions);
 const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
 const profileEditFormValidator = new FormValidator(validationOptions, profileEditForm);
 const cardAddFormValidator = new FormValidator(validationOptions, cardAddForm);
