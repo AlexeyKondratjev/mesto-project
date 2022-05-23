@@ -35,9 +35,14 @@ import {
   openAvatarEditPopup, openProfileEditPopup, closePopup, openCardAddPopup, openImagePreviewPopup
 } from '../components/modal.js';
 import { toggleButtonState, enableValidation } from '../components/validate.js';
+import FormValidator from '../components/FormValidator.js';
+import UserInfo from '../components/UserInfo.js';
 import Api from '../components/Api';
 import Section from '../components/Section.js';
 
+/////////// TEMP CODE >>>>>>>>>//////////////////////////////////////
+import Card from '../components/CardClass.js';
+/////////// TEMP CODE <<<<<<<<<//////////////////////////////////////
 
 
 //Идентификатор текущего пользователя.
@@ -82,6 +87,7 @@ function profileEditFormSubmitHandler(evt) {
     about: aboutYourself.value
   };
 
+  ///////// ---> setUserInfo() ?? ///////////////////
   allFetches.editProfileData(editedProfileData)
     .then((result) => {
       profileTitle.textContent = result.name;
@@ -169,9 +175,8 @@ deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
 //Подгрузка и отображение на странице данных профиля текущего пользователя и массива карточек по умолчанию.
 Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
-  .then((result) => {
-    const profileData = result[0];
-    const initialCardsData = result[1];
+  .then(([profileData, initialCardsData]) => {
+    //Отрисовываем данные профиля текущего пользователя.
     // const cardList = new Section({
     //   items: initialCardsData,
     //   renderer: (item) => {
@@ -185,12 +190,28 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
     currentUserId = profileData._id;
 
     //Отрисовываем массив карточек по умолчанию.
-    initialCardsData.forEach((cardItem) => {
-      const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
-        cardItem.likes, currentUserId, cardItem.owner._id);
+    /////////// TEMP CODE >>>>>>////////////////////
+    /*     initialCardsData.forEach((cardItem) => {
+          const newCard = createCard(getCardMarkup(), cardItem.link, cardItem.name, cardItem._id,
+            cardItem.likes, currentUserId, cardItem.owner._id);
 
-      insertNewCard(newCard, elementContainer);
+          insertNewCard(newCard, elementContainer);
+        }); */
+
+    initialCardsData.forEach((cardItem) => {
+      const cardData = {
+        title: cardItem.name,
+        imageSrc: cardItem.link,
+        id: cardItem._id,
+        likesArray: cardItem.likes,
+        cardOwnerId: cardItem.owner._id
+      };
+      const card = new Card(cardData, '#card-template');
+      const cardElement = card.generateCard(currentUserId);
+
+      insertNewCard(cardElement, elementContainer);
     });
+    /////////// TEMP CODE <<<<<<////////////////////
   })
   .catch((err) => {
     console.log(err);
@@ -199,4 +220,13 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 
 //Активация валидации форм.
-enableValidation(validationOptions);
+/////////// TEMP CODE >>>>>>////////////////////
+//-- enableValidation(validationOptions);
+const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
+const profileEditFormValidator = new FormValidator(validationOptions, profileEditForm);
+const cardAddFormValidator = new FormValidator(validationOptions, cardAddForm);
+
+avatarEditFormValidator.enableValidation();
+profileEditFormValidator.enableValidation();
+cardAddFormValidator.enableValidation();
+/////////// TEMP CODE <<<<<<////////////////////
