@@ -1,10 +1,13 @@
 export default class Card {
-  constructor({title, imageSrc, id, likesArray, cardOwnerId}, selector) {
-    this._title = title;
-    this._imageSrc = imageSrc;
-    this._id = id;
-    this._likesArray = likesArray;
-    this._cardOwnerId = cardOwnerId;
+  constructor({data, handleCardClick, handleLikeClick, handleDeleteClick}, selector) {
+    this._title = data.title;
+    this._imageSrc = data.imageSrc;
+    this._id = data.id;
+    this._likesArray = data.likesArray;
+    this._cardOwnerId = data.cardOwnerId;
+    this._handleCardClick = handleCardClick;
+    this._handleLikeClick = handleLikeClick;
+    this._handleDeleteClick = handleDeleteClick;
 
     this._selector = selector;
   }
@@ -43,6 +46,7 @@ export default class Card {
       imageHeadingToPreview.textContent = titleValue;
 
       openImagePreviewPopup(); */
+      this._handleCardClick();
     });
 
     const cardLikeButton = this._element.querySelector('.card__like-button');
@@ -53,29 +57,27 @@ export default class Card {
       //Определяем метод запроса (что будем делать с лайками - добавлять, или удалять).
       const queryMethod = cardLikeButton.classList.contains('like-button_active') ? 'PUT' : 'DELETE';
 
-      //Изменяем информацию о лайках на сервере.
-/*       changeLikesData(evt.target.closest('.card').id, queryMethod)
-        .then((result) => {
-          //Обновляем отображение значения счетчика лайков в карточке (на клиенте).
-          const likesCountElement = evt.target.closest('.card').querySelector('.card__likes-count');
-          likesCountElement.textContent = result.likes.length;
-        })
-        .catch((err) => {
-          console.log(err);
-        }); */
+      //Изменяем информацию о лайках.
+      this._handleLikeClick(queryMethod);
     });
 
     const cardDeleteButton = this._element.querySelector('.card__delete-button');
 
     if (cardDeleteButton) {
       cardDeleteButton.addEventListener('click', () => {
-        console.log('Removing card... id:', cardDeleteButton.closest('.card').id);
+        //console.log('Removing card... id:', cardDeleteButton.closest('.card').id);
         //deletedCardId = evt.target.closest('.card').id;
         //openDeleteConfirmPopup();
+        this._handleDeleteClick();
       });
     }
   }
 
+  //Метод renderLikesCount отрисовывает значение количества лайков карточки в соотв. элементе.
+  renderLikesCount(likesCount) {
+    const likesCountElement = this._element.querySelector('.card__likes-count');
+    likesCountElement.textContent = likesCount;
+  }
 
   //Метод generateCard выполняет создание элемента новой "карточки места", заполняя шаблон данными,
   //и устанавливая обработчики интерактивных событий.

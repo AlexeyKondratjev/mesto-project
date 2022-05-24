@@ -7,10 +7,14 @@ export default class Section {
       this._container = document.querySelector(boxSelector);
   }
   renderItems() {
-    this._renderedItems.forEach(item => this._renderer(item))
+    this._renderedItems.forEach(item => this._renderer(item));
   }
 
-  addItem() {
+  addItem(element) {
     this._container.append(element);
   }
+
+  /*clear() {  //Не пригодится ли??
+    this._container.innerHTML = '';
+  } */
 }
