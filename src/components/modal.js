@@ -3,7 +3,7 @@ import {
   /*avatarEditPopup,*/ profileEditPopup, cardAddPopup, imagePreviewPopup, elementContainer, avatarSrc,
   userName, aboutYourself, profileTitle, profileSubtitle, profileAvatar, deleteConfirmPopup, popups
 } from '../utils/constants.js';
-import { renderLoadingProcess } from './utils.js';
+import renderLoadingProcess from '../utils/utils.js';
 //import { toggleButtonState } from './validate.js';
 
 
