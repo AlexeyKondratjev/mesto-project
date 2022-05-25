@@ -7,25 +7,6 @@ import renderLoadingProcess from '../utils/utils.js';
 //import { toggleButtonState } from './validate.js';
 
 
-
-// const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',(evt) => {
-//   evt.preventDefault();
-//   const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
-//   //Сохраняем отредактированные данные на сервере.
-//   allFetches.editAvatarData({ avatar: avatarSrc.value })
-//     .then((result) => {
-//       profileAvatar.src = result.avatar;
-//       avaEditPopup.close();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-//     .finally(() => {
-//       renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
-//     });
-// });
-// avaEditPopup.setEventListeners();
-
 //Функция closePopupByEscapeKey - обработчик закрытия попапа по нажатию на клавишу "Escape".
 function closePopupByEscapeKey(evt) {
   console.log(evt.key);

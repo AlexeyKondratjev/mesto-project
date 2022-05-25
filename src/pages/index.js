@@ -107,17 +107,14 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd', (evt) => {
   allFetches.addNewCard(newCardData)
     .then((result) => {
       //Добавляем карточку на страницу.
-      const newCardMarkup = getCardMarkup();
+      const newCardMarkup = getCardMarkup();//тут надо отправить посмотреть в Card
       const newCard = createCard(newCardMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
-
       insertNewCard(newCard, elementContainer);
-      //cardAddForm.reset();
+      //cardAddForm.reset(); - очищается в методе close класса
       cardAddPopup.close();
-
       //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
       const inputList = Array.from(cardAddForm.querySelectorAll('.form__item'));
       const buttonElement = cardAddForm.querySelector('.form__button');
-
       toggleButtonState(inputList, buttonElement, { inactiveButtonClass: 'form__button_disabled' });
     })
     .catch((err) => {
@@ -127,9 +124,18 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd', (evt) => {
       renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
     });
 });
+cardAddPopup.setEventListeners();
+const previewPopup = new PopupWithImage('.popup_type_imagePreview');
+previewPopup.setEventListeners();
+const userInfo = new UserInfo({
+  userNameSelector: '.profile__title',
+  aboutUserSelector: '.profile__subtitle',
+  userAvatarSelector: '.profile__avatar'
+});
 
 const deleteConfirmPopup = new PopupWithDelete('.popup_type_deleteConfirm', () => {
   const previousButtonTextContent = renderLoadingProcess(true, deleteConfirmForm, '');
+  const deletedCardId = userInfo.getUserInfo().userId;
   //Удаляем карточку на сервере.
   allFetches.removeCard(deletedCardId)
     .then((result) => {
@@ -145,14 +151,6 @@ const deleteConfirmPopup = new PopupWithDelete('.popup_type_deleteConfirm', () =
     });
 })
 deleteConfirmPopup.setEventListeners();
-
-const previewPopup = new PopupWithImage('.popup_type_imagePreview');
-previewPopup.setEventListeners();
-const userInfo = new UserInfo({
-  userNameSelector: '.profile__title',
-  aboutUserSelector: '.profile__subtitle',
-  userAvatarSelector: '.profile__avatar'
-});
 
 
 //Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")

@@ -81,8 +81,8 @@ export default class FormValidator {
   //Задает слушатель события 'submit', отменяя при этом стандартное поведение формы,
   //а также вызывает метод _setEventListeners, устанавливая слушателей событий для полей ввода формы .
   enableValidation() {
-    this._formElement.addEventListener('submit', () => {
-      this.preventDefault();
+    this._formElement.addEventListener('submit', (evt) => {
+      evt.preventDefault();
     });
 
     this._setEventListeners();
