@@ -3,7 +3,7 @@ export default class Popup {
     this._popup = document.querySelector(popupSelector);
   }
   open() {
-    alert('in open')
+    alert('in open Popup')
     const context = this;
     this._handleEscClose();
     this._popup.classList.add('popup_opened');
@@ -27,10 +27,12 @@ export default class Popup {
     }
     if(!this._popup.classList.contains('popup_opened')) {
       //alert('in add');
+      console.log(closePopupByEscapeKey);
       document.addEventListener('keydown', closePopupByEscapeKey);
     }
     else {
       //alert('in remove');
+      console.log(closePopupByEscapeKey);
       document.removeEventListener('keydown', closePopupByEscapeKey);
 
     }

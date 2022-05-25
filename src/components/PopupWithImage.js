@@ -6,8 +6,8 @@ export default class PopupWithImage extends Popup {
     super(popupSelector);
   }
   open(imgSrcValue, titleValue) {
-    const imageToPreview = imagePreviewPopup.querySelector('.popup__image');
-    const imageHeadingToPreview = imagePreviewPopup.querySelector('.popup__image-heading');
+    const imageToPreview = this._popup.querySelector('.popup__image');
+    const imageHeadingToPreview = this._popup.querySelector('.popup__image-heading');
 
     imageToPreview.src = imgSrcValue;
     imageToPreview.alt = titleValue;
