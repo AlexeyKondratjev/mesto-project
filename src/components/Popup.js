@@ -3,14 +3,14 @@ export default class Popup {
     this._popup = document.querySelector(popupSelector);
   }
   open() {
-    alert('in open')
+    //alert('in open Popup')
     const context = this;
     this._handleEscClose();
     this._popup.classList.add('popup_opened');
     //look at func openPopup
   };
   close() {
-    alert('in close')
+    //alert('in close')
     const context = this;
     this._handleEscClose();
     this._popup.classList.remove('popup_opened');
@@ -20,17 +20,19 @@ export default class Popup {
     // Содержит логику закрытия попапа клавишей Esc.
     const that = this;
     function closePopupByEscapeKey(evt) {
-      console.log(evt);
+      //console.log(evt);
       if (evt.key === 'Escape') {
         that.close();
       }
     }
     if(!this._popup.classList.contains('popup_opened')) {
       //alert('in add');
+      //console.log(closePopupByEscapeKey);
       document.addEventListener('keydown', closePopupByEscapeKey);
     }
     else {
       //alert('in remove');
+      //console.log(closePopupByEscapeKey);
       document.removeEventListener('keydown', closePopupByEscapeKey);
 
     }
