@@ -9,13 +9,13 @@ import {
   cardAddButton,
   deleteConfirmPopup,
   avatarEditPopup,
-  profileEditPopup,
+  /*profileEditPopup,*/
   avatarEditForm,
   profileEditForm,
   cardAddForm,
   deleteConfirmForm,
   popups,
-  cardAddPopup,
+  /*cardAddPopup,*/
   cardAddPopupCloseButton,
   imagePreviewPopup,
   imagePreviewPopupCloseButton,
@@ -68,11 +68,65 @@ const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit', (evt) => {
     });
 });
 avaEditPopup.setEventListeners();
+const profileEditPopup = new PopupWithForm('.popup_type_profileEdit', (evt) => {
+  evt.preventDefault();
+  const previousButtonTextContent = renderLoadingProcess(true, profileEditForm, '');
+  //Сохраняем отредактированные данные на сервере.
+  const editedProfileData = {
+    name: userName.value,
+    about: aboutYourself.value
+  }
+  ///////// ---> setUserInfo() ?? ///////////////////
+  allFetches.editProfileData(editedProfileData)
+    .then((result) => {
+      profileTitle.textContent = result.name;
+      profileSubtitle.textContent = result.about;
+      profileEditPopup.close();
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoadingProcess(false, profileEditForm, previousButtonTextContent);
+    });
+});
+profileEditPopup.setEventListeners();
+const cardAddPopup = new PopupWithForm('.popup_type_cardAdd', (evt) => {
+  evt.preventDefault();
+  const previousButtonTextContent = renderLoadingProcess(true, cardAddForm, '');
+  //Сохраняем данные карточки на сервере.
+  const newCardData = {
+    name: cardAddForm.cardName.value,
+    link: cardAddForm.cardSrc.value
+  };
+  allFetches.addNewCard(newCardData)
+    .then((result) => {
+      //Добавляем карточку на страницу.
+      const newCardMarkup = getCardMarkup();
+      const newCard = createCard(newCardMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
+
+      insertNewCard(newCard, elementContainer);
+      //cardAddForm.reset();
+      cardAddPopup.close();
+
+      //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
+      const inputList = Array.from(cardAddForm.querySelectorAll('.form__item'));
+      const buttonElement = cardAddForm.querySelector('.form__button');
+
+      toggleButtonState(inputList, buttonElement, { inactiveButtonClass: 'form__button_disabled' });
+    })
+    .catch((err) => {
+      console.log(err);
+    })
+    .finally(() => {
+      renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
+    });
+})
 const userInfo = new UserInfo({
-  userNameSelector: '.profile__title', aboutUserSelector: '.profile__subtitle',
+  userNameSelector: '.profile__title',
+  aboutUserSelector: '.profile__subtitle',
   userAvatarSelector: '.profile__avatar'
 });
-
 
 
 //Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
@@ -81,52 +135,6 @@ function insertNewCard(card, container) {
   container.prepend(card);
 }
 
-//Функция-обработчик события "submit" формы редактирования данных аватара профиля пользователя.
-// function avatarEditFormSubmitHandler(evt) {
-//   evt.preventDefault();
-
-//   const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
-
-//   //Сохраняем отредактированные данные на сервере.
-//   allFetches.editAvatarData({ avatar: avatarSrc.value })
-//     .then((result) => {
-//       profileAvatar.src = result.avatar;
-//       closePopup(avatarEditPopup);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-//     .finally(() => {
-//       renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
-//     });
-// }
-
-//Функция-обработчик события "submit" формы редактирования данных профиля пользователя.
-function profileEditFormSubmitHandler(evt) {
-  evt.preventDefault();
-
-  const previousButtonTextContent = renderLoadingProcess(true, profileEditForm, '');
-
-  //Сохраняем отредактированные данные на сервере.
-  const editedProfileData = {
-    name: userName.value,
-    about: aboutYourself.value
-  };
-
-  ///////// ---> setUserInfo() ?? ///////////////////
-  allFetches.editProfileData(editedProfileData)
-    .then((result) => {
-      profileTitle.textContent = result.name;
-      profileSubtitle.textContent = result.about;
-      closePopup(profileEditPopup);
-    })
-    .catch((err) => {
-      console.log(err);
-    })
-    .finally(() => {
-      renderLoadingProcess(false, profileEditForm, previousButtonTextContent);
-    });
-}
 
 //Функция-обработчик события "submit" формы добавления данных нового "места".
 function cardAddFormSubmitHandler(evt) {
@@ -150,7 +158,6 @@ function cardAddFormSubmitHandler(evt) {
 
 
       //cardAddForm.reset();
-      avaEditPopup.close();
 
       //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
       const inputList = Array.from(cardAddForm.querySelectorAll('.form__item'));
@@ -158,7 +165,7 @@ function cardAddFormSubmitHandler(evt) {
 
       toggleButtonState(inputList, buttonElement, { inactiveButtonClass: 'form__button_disabled' });
 
-      closePopup(cardAddPopup);
+      cardAddPopup.close();
     })
     .catch((err) => {
       console.log(err);
@@ -191,11 +198,11 @@ function deleteConfirmFormSubmitHandler() {
 
 //Назначение обработчиков событий для элементов интерфейса.
 avatarEditButton.addEventListener('click', avaEditPopup.open.bind(avaEditPopup));
-profileEditButton.addEventListener('click', openProfileEditPopup);
-cardAddButton.addEventListener('click', openCardAddPopup);
+profileEditButton.addEventListener('click', profileEditPopup.open.bind(profileEditPopup));
+cardAddButton.addEventListener('click', cardAddPopup.open.bind(cardAddPopup));
 
 //avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
-profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
+//profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
 cardAddForm.addEventListener('submit', cardAddFormSubmitHandler);
 deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);
 
