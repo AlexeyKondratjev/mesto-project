@@ -7,25 +7,10 @@ import {
   avatarEditButton,
   profileEditButton,
   cardAddButton,
-  /*deleteConfirmPopup,*/
-  avatarEditPopup,
-  /*profileEditPopup,*/
   avatarEditForm,
   profileEditForm,
   cardAddForm,
   deleteConfirmForm,
-  popups,
-  /*cardAddPopup,*/
-  cardAddPopupCloseButton,
-  imagePreviewPopup,
-  imagePreviewPopupCloseButton,
-  elementContainer,
-  avatarSrc,
-  userName,
-  aboutYourself,
-  profileTitle,
-  profileSubtitle,
-  profileAvatar,
   validationOptions,
   configData
 } from '../utils/constants.js'
@@ -254,8 +239,7 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd',
         renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
       });
   },
-  () => {});
-
+);
 cardAddPopup.setEventListeners();
 
 
@@ -269,7 +253,7 @@ previewPopup.setEventListeners();
 const deleteConfirmPopup = new PopupWithDelete('.popup_type_deleteConfirm',
   (evt) => {
     evt.preventDefault();
-
+    //Функция отображает процесс загрузки данных в модальных окнах.
     const previousButtonTextContent = renderLoadingProcess(true, deleteConfirmForm, '');
     const deletedCardId = sessionStorage.getItem('deletedCardId');
 
@@ -291,84 +275,16 @@ const deleteConfirmPopup = new PopupWithDelete('.popup_type_deleteConfirm',
 deleteConfirmPopup.setEventListeners();
 
 
-
-//Функция insertNewCard принимает на вход параметры card (HTML-разметку нового элемента "карточка места")
-//и container (узел DOM). Выполняет вставку card в container.
-//function insertNewCard(card, container) {
-//  container.prepend(card);
-//}
-
-
-//Функция-обработчик события "submit" формы добавления данных нового "места".
-// function cardAddFormSubmitHandler(evt) {
-//   evt.preventDefault();
-
-//   const previousButtonTextContent = renderLoadingProcess(true, cardAddForm, '');
-
-//   //Сохраняем данные карточки на сервере.
-//   const newCardData = {
-//     name: cardAddForm.cardName.value,
-//     link: cardAddForm.cardSrc.value
-//   };
-//   allFetches.addNewCard(newCardData)
-//     .then((result) => {
-//       //Добавляем карточку на страницу.
-//       const newCardMarkup = getCardMarkup();
-//       const newCard = createCard(newCardMarkup, result.link, result.name, result._id, [], currentUserId, result.owner._id);
-//       insertNewCard(newCard, elementContainer);
-//       //cardAddForm.reset();
-//       //После программной очистки полей ввода кнопка на форме должна перейти в неактивное состояние.
-//       const inputList = Array.from(cardAddForm.querySelectorAll('.form__item'));
-//       const buttonElement = cardAddForm.querySelector('.form__button');
-//       toggleButtonState(inputList, buttonElement, { inactiveButtonClass: 'form__button_disabled' });
-//       cardAddPopup.close();
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-//     .finally(() => {
-//       renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
-//     });
-// }
-
-//Функция-обработчик события "submit" формы подтверждения удаления карточки "места".
-// function deleteConfirmFormSubmitHandler() {
-//   const previousButtonTextContent = renderLoadingProcess(true, deleteConfirmForm, '');
-//   //Удаляем карточку на сервере.
-//   allFetches.removeCard(deletedCardId)
-//     .then((result) => {
-//       //Удаляем карточку на клиенте.
-//       document.getElementById(deletedCardId).remove();
-//       closePopup(deleteConfirmPopup);
-//     })
-//     .catch((err) => {
-//       console.log(err);
-//     })
-//     .finally(() => {
-//       renderLoadingProcess(false, deleteConfirmForm, previousButtonTextContent);
-//     });
-// }
-
-
-
 //Назначение обработчиков событий для элементов интерфейса.
 avatarEditButton.addEventListener('click', () => {
-  //avaEditPopup.open.bind(avaEditPopup);
   avaEditPopup.formPrefill();
   avaEditPopup.open();
 });
 profileEditButton.addEventListener('click', () => {
-  //profileEditPopup.open.bind(profileEditPopup);
   profileEditPopup.formPrefill();
   profileEditPopup.open();
 });
 cardAddButton.addEventListener('click', () => {
-  //cardAddPopup.open.bind(cardAddPopup);
   cardAddPopup.formPrefill();
   cardAddPopup.open();
 });
-
-//avatarEditForm.addEventListener('submit', avatarEditFormSubmitHandler);
-//profileEditForm.addEventListener('submit', profileEditFormSubmitHandler);
-//cardAddForm.addEventListener('submit', cardAddPopup.cardAddFormSubmitHandler);
-//deleteConfirmForm.addEventListener('submit', deleteConfirmFormSubmitHandler);

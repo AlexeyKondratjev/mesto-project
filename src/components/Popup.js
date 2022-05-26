@@ -1,48 +1,30 @@
 export default class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
+    this._handlEscClose = this._handleEscClose.bind(this);
   }
 
   open() {
-    //alert('in open Popup')
-    const context = this;
-    this._handleEscClose();
+    // Метод open открывает popup, устанавливая слушатель на нажатие Esc
+    document.addEventListener('keydown', this._handlEscClose);
     this._popup.classList.add('popup_opened');
-    //look at func openPopup
   };
 
   close() {
-    //alert('in close')
-    const context = this;
-    this._handleEscClose();
+    // Метод close закрывает popup, снимая слушатель на нажатие Esc
+    document.removeEventListener('keydown', this._handlEscClose);
     this._popup.classList.remove('popup_opened');
-    //look at func closePopup
   };
 
-  _handleEscClose() {
-    // Содержит логику закрытия попапа клавишей Esc.
-    const that = this;
-    function closePopupByEscapeKey(evt) {
-      //console.log(evt);
-      if (evt.key === 'Escape') {
-        that.close();
-      }
-    }
-    if(!this._popup.classList.contains('popup_opened')) {
-      //alert('in add');
-      //console.log(closePopupByEscapeKey);
-      document.addEventListener('keydown', closePopupByEscapeKey);
-    }
-    else {
-      //alert('in remove');
-      //console.log(closePopupByEscapeKey);
-      document.removeEventListener('keydown', closePopupByEscapeKey);
-
+  _handleEscClose(evt) {
+    // Метод _handleEscClose содержит логику закрытия попапа клавишей Esc.
+    if (evt.key === 'Escape') {
+      this.close();
     }
   }
 
   setEventListeners() {
-    // добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
+    // Метод добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
     this._popup.addEventListener('mousedown', (evt) => {
       if (evt.target.classList.contains('popup_opened')) {
         this.close()

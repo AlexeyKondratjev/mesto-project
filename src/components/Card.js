@@ -38,14 +38,6 @@ export default class Card {
     const cardImage = this._element.querySelector('.card__image');
 
     cardImage.addEventListener('click', () => {
-      /* const imageToPreview = imagePreviewPopup.querySelector('.popup__image');
-      const imageHeadingToPreview = imagePreviewPopup.querySelector('.popup__image-heading');
-
-      imageToPreview.src = imgSrcValue;
-      imageToPreview.alt = titleValue;
-      imageHeadingToPreview.textContent = titleValue;
-
-      openImagePreviewPopup(); */
       this._handleCardClick();
     });
 
@@ -65,9 +57,6 @@ export default class Card {
 
     if (cardDeleteButton) {
       cardDeleteButton.addEventListener('click', () => {
-        //console.log('Removing card... id:', cardDeleteButton.closest('.card').id);
-        //deletedCardId = evt.target.closest('.card').id;
-        //openDeleteConfirmPopup();
         this._handleDeleteClick();
       });
     }
