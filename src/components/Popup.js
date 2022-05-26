@@ -2,6 +2,7 @@ export default class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
   }
+
   open() {
     //alert('in open Popup')
     const context = this;
@@ -9,6 +10,7 @@ export default class Popup {
     this._popup.classList.add('popup_opened');
     //look at func openPopup
   };
+
   close() {
     //alert('in close')
     const context = this;
@@ -16,6 +18,7 @@ export default class Popup {
     this._popup.classList.remove('popup_opened');
     //look at func closePopup
   };
+
   _handleEscClose() {
     // Содержит логику закрытия попапа клавишей Esc.
     const that = this;
@@ -37,6 +40,7 @@ export default class Popup {
 
     }
   }
+
   setEventListeners() {
     // добавляет слушатель клика иконке закрытия попапа. Модальное окно также закрывается при клике на затемнённую область вокруг формы.
     this._popup.addEventListener('mousedown', (evt) => {
