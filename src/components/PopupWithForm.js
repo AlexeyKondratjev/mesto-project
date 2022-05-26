@@ -32,5 +32,3 @@ export default class PopupWithForm extends Popup {
     this._handleFormPrefill();
   }
 }
-
-// Для каждого попапа создавайте свой экземпляр класса PopupWithForm.

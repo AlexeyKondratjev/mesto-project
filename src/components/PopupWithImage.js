@@ -1,5 +1,4 @@
 import Popup from "./Popup";
-import {imagePreviewPopup} from '../utils/constants.js';
 
 export default class PopupWithImage extends Popup {
   constructor(popupSelector) {
@@ -7,6 +6,7 @@ export default class PopupWithImage extends Popup {
   }
 
   open(imgSrcValue, titleValue) {
+    // Метод open перезаписывает родительский метод, вставляет в попап картинку с src изображения и подписью к картинке.
     const imageToPreview = this._popup.querySelector('.popup__image');
     const imageHeadingToPreview = this._popup.querySelector('.popup__image-heading');
 
