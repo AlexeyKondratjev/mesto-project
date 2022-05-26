@@ -239,7 +239,7 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd',
         renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
       });
   },
-);
+()=>{});
 cardAddPopup.setEventListeners();
 
 

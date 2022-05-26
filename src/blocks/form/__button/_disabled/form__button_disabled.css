@@ -5,6 +5,7 @@
   color: #000;
   opacity: .2;
   cursor: auto;
+  transition: opacity 0.5s linear;
 }
 
 .form__button_disabled:hover {
