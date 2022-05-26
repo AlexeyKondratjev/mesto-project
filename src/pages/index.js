@@ -30,15 +30,6 @@ import {
   configData
 } from '../utils/constants.js'
 import renderLoadingProcess from '../utils/utils.js';
-import {
-  openAvatarEditPopup,
-  openProfileEditPopup,
-  closePopup,
-  openCardAddPopup,
-  openImagePreviewPopup
-} from '../components/__modal.js';
-//import { toggleButtonState, enableValidation } from '../components/validate.js';
-//import { deletedCardId, getCardMarkup, createCard } from '../components/__card.js';
 
 import FormValidator from '../components/FormValidator.js';
 import UserInfo from '../components/UserInfo.js';
