@@ -22,3 +22,6 @@
 
 **Ссылка на проект**
 Проект доступен на GitHub Pages по [ссылке](https://alexeykondratjev.github.io/mesto-project/).
+
+**Данные напарника по разработке**
+[ссылка на GitHub](https://github.com/Kartinkartin), [e-mail]().

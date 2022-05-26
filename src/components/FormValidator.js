@@ -79,13 +79,26 @@ export default class FormValidator {
 
   //Метод глобального включения валидации данных формы.
   //Задает слушатель события 'submit', отменяя при этом стандартное поведение формы,
-  //а также вызывает метод _setEventListeners, устанавливая слушателей событий для полей ввода формы .
+  //а также вызывает метод _setEventListeners, устанавливая слушателей событий для полей ввода формы.
   enableValidation() {
     this._formElement.addEventListener('submit', (evt) => {
       evt.preventDefault();
     });
 
     this._setEventListeners();
+  }
+
+  //Метод resetValidation сбрасывает состояние валидации формы к значению по-умолчанию:
+  //сообщения об ошибках скрыты, стили полей приведены к валидным значениям, кнопка формы неактивна и недоступна.
+  resetValidation() {
+    this._inputList.forEach((inputElement) => {
+      this._hideInputError(inputElement);
+    });
+
+    if (!this._buttonElement.classList.contains(this._inactiveButtonClass)) {
+      this._buttonElement.classList.add(this._inactiveButtonClass);
+    }
+    this._buttonElement.disabled = true;
   }
 
 }
