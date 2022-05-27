@@ -1,119 +1,71 @@
-const config = {
-  baseUrl: 'https://nomoreparties.co/v1/plus-cohort-9',
-  headers: {
-    authorization: '15079f84-7c32-450a-9816-73a1a409c0ce',
-    'Content-Type': 'application/json'
+export default class Api {
+  // Класс Api формирует запросы на сервер. Конструктор класса принимает объект с параметрами запроса: url и заголовки запросов.
+  constructor({ baseUrl, headers }) {
+      this._baseUrl = baseUrl,
+      this._headers = headers
+  }
+  // Приватный метод _checkResponse проверяет ответ, полученный от сервера
+  _checkResponse(res) {
+      if (res.ok) {
+          return res.json();
+      }
+      return Promise.reject(`Ошибка: ${res.status}`);
+  }
+  // Метод getProfileData возвращает запрос на сервер для получения данных пользователя
+  getProfileData() {
+      return fetch(`${this._baseUrl}/users/me`, {
+          headers: this._headers,
+      })
+      .then(this._checkResponse)
+  }
+  // Метод getInitialCards возвращает запрос на сервер для получения массива карточек с фотографиями
+  getInitialCards() {
+      return fetch(`${this._baseUrl}/cards`, {
+          headers: this._headers,
+      })
+      .then(this._checkResponse)
+  }
+  // Метод editProfileData возвращает запрос на сервер, изменяющий данные пользователя
+  editProfileData(profileData) {
+      return fetch(`${this._baseUrl}/users/me`, {
+          method: 'PATCH',
+          headers: this._headers,
+          body: JSON.stringify(profileData)
+      })
+      .then(this._checkResponse);
+  }
+  // Метод  editAvatarData возвращает запрос на сервер, изменяющий аватар пользователя
+  editAvatarData(avatarData) {
+      return fetch(`${this._baseUrl}/users/me/avatar`, {
+          method: 'PATCH',
+          headers: this._headers,
+          body: JSON.stringify(avatarData)
+      })
+      .then(this._checkResponse);
+  }
+  // Метод addNewCard возвращает запрос на сервер, добавляющий карточку в массив уже существующих. Метод принимает и передает в запросе на сервер данные карточки, введеные пользователем: описание и url
+  addNewCard(cardData) {
+      return fetch(`${this._baseUrl}/cards`, {
+          method: 'POST',
+          headers: this._headers,
+          body: JSON.stringify(cardData)
+      })
+      .then(this._checkResponse)
+  }
+  // Метод removeCard возвращает запрос на сервер, добавляющий карточку в массив уже существующих. Метод принимает и передает в запросе на сервер id удаляемой карточки
+  removeCard(cardId) {
+      return fetch(`${this._baseUrl}/cards/${cardId}`, {
+          method: 'DELETE',
+          headers: this._headers,
+      })
+      .then(this._checkResponse)
+  }
+ // Метод changeLikesData возвращает запрос на сервер, который поставит или снимет Like с карточки. Метод принимает id карточки и "POST" или "DELETE" в качестве метода запроса
+  changeLikesData(cardId, queryMethod) {
+    return fetch(`${this._baseUrl}/cards/likes/${cardId}`, {
+      method: queryMethod,
+      headers: this._headers
+    })
+    .then(this._checkResponse);
   }
 }
-
-//Функция getInitialCards обращается к серверу и получает данные всех карточкек учебной группы.
-const getInitialCards = () => {
-  return fetch(`${config.baseUrl}/cards`, { headers: config.headers })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-//Функция getProfileData обращается к серверу и получает данные профиля текущего пользователя.
-const getProfileData = () => {
-  return fetch(`${config.baseUrl}/users/me`, { headers: config.headers })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-//Функция editAvatarData обращается к серверу и сохраняет там измененные на клиенте
-//данные аватара профиля текущего пользователя (ссылку на изображение).
-//Принимает на вход параметр avatarData (объект со сcылкой на изображение (ключ: "avatar"), которое необходимо сохранить).
-const editAvatarData = (avatarData) => {
-  return fetch(`${config.baseUrl}/users/me/avatar`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify(avatarData)
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-//Функция editProfileData обращается к серверу и сохраняет там измененные на клиенте
-//данные профиля текущего пользователя.
-//Принимает на вход параметр profileData (объект с данными пользователя (ключи: "name", "about"), которые необходимо сохранить).
-const editProfileData = (profileData) => {
-  return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH',
-    headers: config.headers,
-    body: JSON.stringify(profileData)
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-//Функция addNewCard обращается к серверу и сохраняет там данные новой карточки.
-//Принимает на вход параметр cardData (объект с данными карточки (ключи: "name", "link"), которые необходимо сохранить).
-const addNewCard = (cardData) => {
-  return fetch(`${config.baseUrl}/cards`, {
-    method: 'POST',
-    headers: config.headers,
-    body: JSON.stringify(cardData)
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-//Функция removeCard обращается к серверу и удаляет там данные карточки.
-//Принимает на вход параметр cardId (уникальный идентификатор карточки, которую нужно удалить).
-const removeCard = (cardId) => {
-  return fetch(`${config.baseUrl}/cards/${cardId}`, {
-    method: 'DELETE',
-    headers: config.headers
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-//Функция changeLikesData обращается к серверу и изменяет там данные о лайках карточки.
-//Принимает на вход параметры cardId (уникальный идентификатор карточки, информацию о лайках которой надо изменить) и
-//queryMethod (метод запроса: "PUT" - для добавления лайка, "DELETE" - для удаления лайка).
-const changeLikesData = (cardId, queryMethod) => {
-  return fetch(`${config.baseUrl}/cards/likes/${cardId}`, {
-    method: queryMethod,
-    headers: config.headers
-  })
-    .then(res => {
-      if (res.ok) {
-        return res.json();
-      }
-
-      return Promise.reject(`Ошибка: ${res.status}`);
-    });
-}
-
-export { getInitialCards, getProfileData, editAvatarData, editProfileData, addNewCard, removeCard, changeLikesData };
