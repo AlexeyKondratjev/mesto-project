@@ -8,7 +8,6 @@ export default class Card {
     this._handleCardClick = handleCardClick;
     this._handleLikeClick = handleLikeClick;
     this._handleDeleteClick = handleDeleteClick;
-
     this._selector = selector;
   }
 
@@ -36,7 +35,6 @@ export default class Card {
   //Метод _setEventListeners задает обработчики событий интерактивным элементам, присутствующим на карточке.
   _setEventListeners() {
     const cardImage = this._element.querySelector('.card__image');
-
     cardImage.addEventListener('click', () => {
       this._handleCardClick();
     });
@@ -59,18 +57,14 @@ export default class Card {
       cardDeleteButton.addEventListener('click', () => {
         this._handleDeleteClick();
       });
-    }
+    };
   }
-
   //Метод renderLikesCount отрисовывает значение количества лайков карточки в соотв. элементе.
   renderLikesCount(likesCount) {
     const likesCountElement = this._element.querySelector('.card__likes-count');
     likesCountElement.textContent = likesCount;
   }
 
-  //Метод generateCard выполняет создание элемента новой "карточки места", заполняя шаблон данными,
-  //и устанавливая обработчики интерактивных событий.
-  //Возвращает HTML-разметку готового элемента "карточки места".
   generateCard(currentUserId) {
     this._element = this._getElementMarkup();
 
