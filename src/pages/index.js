@@ -107,7 +107,7 @@ const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',
     const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
 
     //Сохраняем отредактированные данные на сервере...
-    allFetches.editAvatarData({ avatar: avatarEditForm.avatarSrc.value })
+    allFetches.editAvatarData({ avatar: avatarEditForm.avatarSrc.value })//_getIputValues
       .then((result) => {
         //... а затем - на клиенте.
         const userData = {
@@ -277,14 +277,14 @@ deleteConfirmPopup.setEventListeners();
 
 //Назначение обработчиков событий для элементов интерфейса.
 avatarEditButton.addEventListener('click', () => {
-  avaEditPopup.formPrefill();
+  avaEditPopup.prefillForm();
   avaEditPopup.open();
 });
 profileEditButton.addEventListener('click', () => {
-  profileEditPopup.formPrefill();
+  profileEditPopup.prefillForm();
   profileEditPopup.open();
 });
 cardAddButton.addEventListener('click', () => {
-  cardAddPopup.formPrefill();
+  cardAddPopup.prefillForm();
   cardAddPopup.open();
 });
