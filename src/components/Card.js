@@ -34,18 +34,15 @@ export default class Card {
 
   //Метод _setEventListeners задает обработчики событий интерактивным элементам, присутствующим на карточке.
   _setEventListeners() {
-    const cardImage = this._element.querySelector('.card__image');
-    cardImage.addEventListener('click', () => {
+    this._cardImage.addEventListener('click', () => {
       this._handleCardClick();
     });
 
-    const cardLikeButton = this._element.querySelector('.card__like-button');
-
-    cardLikeButton.addEventListener('click', () => {
-      cardLikeButton.classList.toggle('like-button_active');
+    this._cardLikeButton.addEventListener('click', () => {
+      //this._cardLikeButton.classList.toggle('like-button_active');
 
       //Определяем метод запроса (что будем делать с лайками - добавлять, или удалять).
-      const queryMethod = cardLikeButton.classList.contains('like-button_active') ? 'PUT' : 'DELETE';
+      const queryMethod = this._cardLikeButton.classList.contains('like-button_active') ? 'DELETE' : 'PUT';
 
       //Изменяем информацию о лайках.
       this._handleLikeClick(queryMethod);
@@ -59,25 +56,34 @@ export default class Card {
       });
     };
   }
+
   //Метод renderLikesCount отрисовывает значение количества лайков карточки в соотв. элементе.
   renderLikesCount(likesCount) {
-    const likesCountElement = this._element.querySelector('.card__likes-count');
-    likesCountElement.textContent = likesCount;
+    this._likesCountElement.textContent = likesCount;
+  }
+
+  //Метод toggleLikeButtonActivity переключает активность кнопки лайка на обратное значение.
+  toggleLikeButtonActivity() {
+    this._cardLikeButton.classList.toggle('like-button_active');
   }
 
   generateCard(currentUserId) {
     this._element = this._getElementMarkup();
 
+    this._likesCountElement = this._element.querySelector('.card__likes-count');
+    this._cardImage = this._element.querySelector('.card__image');
+    this._cardLikeButton = this._element.querySelector('.card__like-button');
+
     this._element.querySelector('.card__title').textContent = this._title;
-    this._element.querySelector('.card__image').src = this._imageSrc;
-    this._element.querySelector('.card__image').alt = this._title;
+    this._cardImage.src = this._imageSrc;
+    this._cardImage.alt = this._title;
     this._element.id = this._id;
 
     //Задаем состояние кнопки лайка (лайкнул ли карточку текущий пользователь) и количество лайков в целом.
     if (this._isLikedByCurrentUser(currentUserId)) {
-      this._element.querySelector('.card__like-button').classList.add('like-button_active');
+      this._cardLikeButton.classList.add('like-button_active');
     } else {
-      this._element.querySelector('.card__like-button').classList.remove('like-button_active');
+      this._cardLikeButton.classList.remove('like-button_active');
     };
 
     this._element.querySelector('.card__likes-count').textContent = this._likesArray.length;

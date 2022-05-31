@@ -34,7 +34,13 @@ const userInfo = new UserInfo({
   userAvatarSelector: '.profile__avatar'
 });
 
-
+//TEMP CODE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+/* const cardList = new Section({
+  items: [],
+  renderer: (cardItem) => { }
+},
+  '.elements'); */
+//TEMP CODE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
 
 //Активация валидации форм.
 const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
@@ -72,7 +78,8 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
           handleLikeClick: (queryMethod) => {
             allFetches.changeLikesData(cardData.id, queryMethod)
               .then((result) => {
-                //Обновляем отображение значения счетчика лайков в карточке (на клиенте).
+                //Обновляем отображение статуса лайка (проставлен/нет) и значение счетчика лайков в карточке (на клиенте).
+                card.toggleLikeButtonActivity();
                 card.renderLikesCount(result.likes.length);
               })
               .catch((err) => {
@@ -110,14 +117,7 @@ const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',
     allFetches.editAvatarData({ avatar: avatarEditForm.avatarSrc.value })//_getIputValues
       .then((result) => {
         //... а затем - на клиенте.
-        const userData = {
-          name: undefined,
-          about: undefined,
-          avatar: result.avatar,
-          _id: undefined
-        };
-
-        userInfo.setUserInfo(userData);
+        userInfo.setUserInfo(result);
         avaEditPopup.close();
       })
       .catch((err) => {
@@ -127,9 +127,7 @@ const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',
         renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
       });
   },
-  () => {
-    avatarEditForm.avatarSrc.value = userInfo.getUserInfo().userAvatar;
-  });
+  () => {});
 
 avaEditPopup.setEventListeners();
 
@@ -146,14 +144,7 @@ const profileEditPopup = new PopupWithForm('.popup_type_profileEdit',
     allFetches.editProfileData({ name: profileEditForm.userName.value, about: profileEditForm.aboutYourself.value })
       .then((result) => {
         //... а затем - на клиенте.
-        const userData = {
-          name: result.name,
-          about: result.about,
-          avatar: undefined,
-          _id: undefined
-        };
-
-        userInfo.setUserInfo(userData);
+        userInfo.setUserInfo(result);
         profileEditPopup.close();
       })
       .catch((err) => {
@@ -164,8 +155,10 @@ const profileEditPopup = new PopupWithForm('.popup_type_profileEdit',
       });
   },
   () => {
-    profileEditForm.userName.value = userInfo.getUserInfo().userName;
-    profileEditForm.aboutYourself.value = userInfo.getUserInfo().aboutUser;
+    const {userName, aboutUser} = userInfo.getUserInfo();
+
+    profileEditForm.userName.value = userName;
+    profileEditForm.aboutYourself.value = aboutUser;
   });
 
 profileEditPopup.setEventListeners();
@@ -229,8 +222,6 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd',
         cardList.renderItems();
 
         cardAddPopup.close();
-
-        cardAddFormValidator.resetValidation();
       })
       .catch((err) => {
         console.log(err);
@@ -239,7 +230,7 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd',
         renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
       });
   },
-()=>{});
+  () => { });
 cardAddPopup.setEventListeners();
 
 
@@ -278,13 +269,16 @@ deleteConfirmPopup.setEventListeners();
 //Назначение обработчиков событий для элементов интерфейса.
 avatarEditButton.addEventListener('click', () => {
   avaEditPopup.prefillForm();
+  avatarEditFormValidator.resetValidation();
   avaEditPopup.open();
 });
 profileEditButton.addEventListener('click', () => {
   profileEditPopup.prefillForm();
+  profileEditFormValidator.resetValidation();
   profileEditPopup.open();
 });
 cardAddButton.addEventListener('click', () => {
   cardAddPopup.prefillForm();
+  cardAddFormValidator.resetValidation();
   cardAddPopup.open();
 });
