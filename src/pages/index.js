@@ -10,7 +10,6 @@ import {
   avatarEditForm,
   profileEditForm,
   cardAddForm,
-  deleteConfirmForm,
   validationOptions,
   configData
 } from '../utils/constants.js'
@@ -142,7 +141,7 @@ const profileEditPopup = new PopupWithForm('.popup_type_profileEdit',
     profileEditPopup.renderLoading(true);
 
     //Сохраняем отредактированные данные на сервере...
-    allFetches.editProfileData({ name: inputsValue.userName, about: inputsValue.aboutYourself })
+    allFetches.editProfileData({ name: inputsValue.userName, about: inputsValue.aboutUser })
       .then((result) => {
         //... а затем - на клиенте.
         userInfo.setUserInfo(result);
@@ -156,10 +155,8 @@ const profileEditPopup = new PopupWithForm('.popup_type_profileEdit',
       });
   },
   () => {
-    const { userName, aboutUser } = userInfo.getUserInfo();
-
-    profileEditForm.userName.value = userName;
-    profileEditForm.aboutYourself.value = aboutUser;
+    const data = userInfo.getUserInfo();
+    profileEditPopup.setInputValues(data);
   });
 
 profileEditPopup.setEventListeners();
