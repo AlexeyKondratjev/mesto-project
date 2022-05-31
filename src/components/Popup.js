@@ -2,6 +2,8 @@ export default class Popup {
   constructor(popupSelector) {
     this._popup = document.querySelector(popupSelector);
     this._handleEscClose = this._handleEscClose.bind(this);
+
+    this._submitButton = this._popup.querySelector('.form__button');
   }
 
   open() {
@@ -33,5 +35,13 @@ export default class Popup {
         this.close()
       }
     })
+  }
+
+  //Метод отображает процесс загрузки данных в модальных окнах.
+  //Принимает на вход параметры isLoading (булев тип данных; признак того - загрузка активна, или нет),
+  //buttonText (текст кнопки сабмита, который устанавливается в соответствии со статусом загрузки).
+  renderLoading(isLoading, buttonText = 'Сохранение...') {
+    this._submitButton.disabled = isLoading;
+    this._submitButton.textContent = buttonText;
   }
 }
