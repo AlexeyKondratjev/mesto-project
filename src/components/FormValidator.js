@@ -95,10 +95,7 @@ export default class FormValidator {
       this._hideInputError(inputElement);
     });
 
-    if (!this._buttonElement.classList.contains(this._inactiveButtonClass)) {
-      this._buttonElement.classList.add(this._inactiveButtonClass);
-    }
-    this._buttonElement.disabled = true;
+    this._toggleButtonState();
   }
 
 }
