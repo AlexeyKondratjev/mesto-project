@@ -7,8 +7,8 @@ export default class Section {
       this._container = document.querySelector(boxSelector);
   }
 
-  renderItems() {
-    this._renderedItems.forEach(item => this._renderer(item));
+  renderItems(items) {
+    items.forEach(item => this._renderer(item));
   }
 
   //Метод addItem принимает на вход параметр element (HTML-разметку нового элемента "карточки места")

@@ -33,14 +33,54 @@ const userInfo = new UserInfo({
   aboutUserSelector: '.profile__subtitle',
   userAvatarSelector: '.profile__avatar'
 });
-
-//TEMP CODE >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-/* const cardList = new Section({
+const cardList = new Section({
   items: [],
-  renderer: (cardItem) => { }
+  renderer: (cardItem) => {
+    const cardData = {
+      title: cardItem.name,
+      imageSrc: cardItem.link,
+      id: cardItem._id,
+      likesArray: cardItem.likes,
+      cardOwnerId: cardItem.owner._id
+    };
+
+    const cardElement = createCard(cardData);
+
+    cardList.addItem(cardElement);
+  }
 },
-  '.elements'); */
-//TEMP CODE <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+  '.elements');
+
+
+
+//Функция создания нового элемента карточки.
+//Возвращает полностью готовую разметку карточки.
+function createCard(cardData) {
+  const card = new Card({
+    data: cardData,
+    handleCardClick: () => {
+      previewPopup.open(cardData.imageSrc, cardData.title);
+    },
+    handleLikeClick: (queryMethod) => {
+      allFetches.changeLikesData(cardData.id, queryMethod)
+        .then((result) => {
+          //Обновляем отображение статуса лайка (проставлен/нет) и значение счетчика лайков в карточке (на клиенте).
+          card.toggleLikeButtonActivity();
+          card.renderLikesCount(result.likes.length);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+    handleDeleteClick: () => {
+      sessionStorage.setItem('deletedCardId', cardData.id);
+      deleteConfirmPopup.open();
+    }
+  }, '#card-template');
+
+  return card.generateCard(userInfo.getUserInfo().userId);
+}
+
 
 //Активация валидации форм.
 const avatarEditFormValidator = new FormValidator(validationOptions, avatarEditForm);
@@ -60,45 +100,7 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
     userInfo.setUserInfo(profileData);
 
     //Отрисовываем массив карточек по умолчанию.
-    const cardList = new Section({
-      items: initialCardsData,
-      renderer: (cardItem) => {
-        const cardData = {
-          title: cardItem.name,
-          imageSrc: cardItem.link,
-          id: cardItem._id,
-          likesArray: cardItem.likes,
-          cardOwnerId: cardItem.owner._id
-        };
-        const card = new Card({
-          data: cardData,
-          handleCardClick: () => {
-            previewPopup.open(cardData.imageSrc, cardData.title);
-          },
-          handleLikeClick: (queryMethod) => {
-            allFetches.changeLikesData(cardData.id, queryMethod)
-              .then((result) => {
-                //Обновляем отображение статуса лайка (проставлен/нет) и значение счетчика лайков в карточке (на клиенте).
-                card.toggleLikeButtonActivity();
-                card.renderLikesCount(result.likes.length);
-              })
-              .catch((err) => {
-                console.log(err);
-              });
-          },
-          handleDeleteClick: () => {
-            sessionStorage.setItem('deletedCardId', cardData.id);
-            deleteConfirmPopup.open();
-          }
-        }, '#card-template');
-        const cardElement = card.generateCard(userInfo.getUserInfo().userId);
-
-        cardList.addItem(cardElement);
-      }
-    },
-      '.elements');
-
-    cardList.renderItems();
+    cardList.renderItems(initialCardsData);
   })
   .catch((err) => {
     console.log(err);
@@ -127,7 +129,7 @@ const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',
         renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
       });
   },
-  () => {});
+  () => { });
 
 avaEditPopup.setEventListeners();
 
@@ -155,7 +157,7 @@ const profileEditPopup = new PopupWithForm('.popup_type_profileEdit',
       });
   },
   () => {
-    const {userName, aboutUser} = userInfo.getUserInfo();
+    const { userName, aboutUser } = userInfo.getUserInfo();
 
     profileEditForm.userName.value = userName;
     profileEditForm.aboutYourself.value = aboutUser;
@@ -181,45 +183,7 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd',
     allFetches.addNewCard(newCardData)
       .then((result) => {
         //Добавляем карточку на страницу.
-        const cardList = new Section({
-          items: [result],
-          renderer: (cardItem) => {
-            const cardData = {
-              title: cardItem.name,
-              imageSrc: cardItem.link,
-              id: cardItem._id,
-              likesArray: cardItem.likes,
-              cardOwnerId: cardItem.owner._id
-            };
-            const card = new Card({
-              data: cardData,
-              handleCardClick: () => {
-                previewPopup.open(cardData.imageSrc, cardData.title);
-              },
-              handleLikeClick: (queryMethod) => {
-                allFetches.changeLikesData(cardData.id, queryMethod)
-                  .then((result) => {
-                    //Обновляем отображение значения счетчика лайков в карточке (на клиенте).
-                    card.renderLikesCount(result.likes.length);
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              },
-              handleDeleteClick: () => {
-                sessionStorage.setItem('deletedCardId', cardData.id);
-                deleteConfirmPopup.open();
-              }
-            }, '#card-template');
-
-            const cardElement = card.generateCard(userInfo.getUserInfo().userId);
-
-            cardList.addItem(cardElement);
-          }
-        },
-          '.elements');
-
-        cardList.renderItems();
+        cardList.renderItems([result]);
 
         cardAddPopup.close();
       })
