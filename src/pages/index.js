@@ -109,13 +109,13 @@ Promise.all([allFetches.getProfileData(), allFetches.getInitialCards()])
 
 //Попап редактирования аватарки.
 const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',
-  (evt) => {
+  (evt, inputsValue) => {
     evt.preventDefault();
 
     avaEditPopup.renderLoading(true);
 
     //Сохраняем отредактированные данные на сервере...
-    allFetches.editAvatarData({ avatar: avatarEditForm.avatarSrc.value })//_getIputValues
+    allFetches.editAvatarData({ avatar: inputsValue.avatarSrc })//_getIputValues
       .then((result) => {
         //... а затем - на клиенте.
         userInfo.setUserInfo(result);
@@ -136,13 +136,13 @@ avaEditPopup.setEventListeners();
 
 //Попап редактирования данных профиля.
 const profileEditPopup = new PopupWithForm('.popup_type_profileEdit',
-  (evt) => {
+  (evt, inputsValue) => {
     evt.preventDefault();
 
     profileEditPopup.renderLoading(true);
 
     //Сохраняем отредактированные данные на сервере...
-    allFetches.editProfileData({ name: profileEditForm.userName.value, about: profileEditForm.aboutYourself.value })
+    allFetches.editProfileData({ name: inputsValue.userName, about: inputsValue.aboutYourself })
       .then((result) => {
         //... а затем - на клиенте.
         userInfo.setUserInfo(result);
@@ -168,15 +168,15 @@ profileEditPopup.setEventListeners();
 
 //Попап добавления карточки.
 const cardAddPopup = new PopupWithForm('.popup_type_cardAdd',
-  (evt) => {
+  (evt, inputsValue) => {
     evt.preventDefault();
 
     cardAddPopup.renderLoading(true);
 
     //Сохраняем данные карточки на сервере.
     const newCardData = {
-      name: cardAddForm.cardName.value,
-      link: cardAddForm.cardSrc.value
+      name: inputsValue.cardName,
+      link: inputsValue.cardSrc
     };
 
     allFetches.addNewCard(newCardData)
