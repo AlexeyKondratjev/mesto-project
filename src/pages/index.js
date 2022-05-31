@@ -14,7 +14,6 @@ import {
   validationOptions,
   configData
 } from '../utils/constants.js'
-import renderLoadingProcess from '../utils/utils.js';
 
 import FormValidator from '../components/FormValidator.js';
 import UserInfo from '../components/UserInfo.js';
@@ -113,7 +112,7 @@ const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',
   (evt) => {
     evt.preventDefault();
 
-    const previousButtonTextContent = renderLoadingProcess(true, avatarEditForm, '');
+    avaEditPopup.renderLoading(true);
 
     //Сохраняем отредактированные данные на сервере...
     allFetches.editAvatarData({ avatar: avatarEditForm.avatarSrc.value })//_getIputValues
@@ -126,7 +125,7 @@ const avaEditPopup = new PopupWithForm('.popup_type_avatarEdit',
         console.log(err);
       })
       .finally(() => {
-        renderLoadingProcess(false, avatarEditForm, previousButtonTextContent);
+        avaEditPopup.renderLoading(false, 'Сохранить');
       });
   },
   () => { });
@@ -140,7 +139,7 @@ const profileEditPopup = new PopupWithForm('.popup_type_profileEdit',
   (evt) => {
     evt.preventDefault();
 
-    const previousButtonTextContent = renderLoadingProcess(true, profileEditForm, '');
+    profileEditPopup.renderLoading(true);
 
     //Сохраняем отредактированные данные на сервере...
     allFetches.editProfileData({ name: profileEditForm.userName.value, about: profileEditForm.aboutYourself.value })
@@ -153,7 +152,7 @@ const profileEditPopup = new PopupWithForm('.popup_type_profileEdit',
         console.log(err);
       })
       .finally(() => {
-        renderLoadingProcess(false, profileEditForm, previousButtonTextContent);
+        profileEditPopup.renderLoading(false, 'Сохранить');
       });
   },
   () => {
@@ -172,7 +171,7 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd',
   (evt) => {
     evt.preventDefault();
 
-    const previousButtonTextContent = renderLoadingProcess(true, cardAddForm, '');
+    cardAddPopup.renderLoading(true);
 
     //Сохраняем данные карточки на сервере.
     const newCardData = {
@@ -191,7 +190,7 @@ const cardAddPopup = new PopupWithForm('.popup_type_cardAdd',
         console.log(err);
       })
       .finally(() => {
-        renderLoadingProcess(false, cardAddForm, previousButtonTextContent);
+        cardAddPopup.renderLoading(false, 'Создать');
       });
   },
   () => { });
@@ -209,7 +208,7 @@ const deleteConfirmPopup = new PopupWithDelete('.popup_type_deleteConfirm',
   (evt) => {
     evt.preventDefault();
     //Функция отображает процесс загрузки данных в модальных окнах.
-    const previousButtonTextContent = renderLoadingProcess(true, deleteConfirmForm, '');
+    deleteConfirmPopup.renderLoading(true, 'Удаление...');
     const deletedCardId = sessionStorage.getItem('deletedCardId');
 
     //Удаляем карточку на сервере.
@@ -223,7 +222,7 @@ const deleteConfirmPopup = new PopupWithDelete('.popup_type_deleteConfirm',
         console.log(err);
       })
       .finally(() => {
-        renderLoadingProcess(false, deleteConfirmForm, previousButtonTextContent);
+        deleteConfirmPopup.renderLoading(false, 'Да');
       });
   });
 
