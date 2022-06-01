@@ -8,6 +8,7 @@
   opacity: 0;
   border: none;
   position: absolute;
+  transition: opacity 0.5s linear;
 }
 
 .profile__avatar-edit-button:hover {
